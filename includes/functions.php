@@ -97,25 +97,25 @@ function sfs_support_html5() {
 }
 
 function sfs_support_html5_fallback() {
-  return (bool) apply_filters( 'wpcf7_support_html5_fallback', false );
+  return (bool) apply_filters( 'sfs_support_html5_fallback', false );
 }
 
 function sfs_use_really_simple_captcha() {
-  return apply_filters( 'wpcf7_use_really_simple_captcha',
-    WPCF7_USE_REALLY_SIMPLE_CAPTCHA );
+  return apply_filters( 'sfs_use_really_simple_captcha',
+    SFS_USE_REALLY_SIMPLE_CAPTCHA );
 }
 
 function sfs_validate_configuration() {
-  return apply_filters( 'wpcf7_validate_configuration',
-    WPCF7_VALIDATE_CONFIGURATION );
+  return apply_filters( 'sfs_validate_configuration',
+    SFS_VALIDATE_CONFIGURATION );
 }
 
 function sfs_load_js() {
-  return apply_filters( 'wpcf7_load_js', WPCF7_LOAD_JS );
+  return apply_filters( 'sfs_load_js', SFS_LOAD_JS );
 }
 
 function sfs_load_css() {
-  return apply_filters( 'wpcf7_load_css', WPCF7_LOAD_CSS );
+  return apply_filters( 'sfs_load_css', SFS_LOAD_CSS );
 }
 
 function sfs_format_atts( $atts ) {

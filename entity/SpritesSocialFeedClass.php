@@ -16,6 +16,7 @@ class SpritesSocialFeed {
       ),
       'rewrite' => false,
       'query_var' => false,
+      'menu_icon' => 'dashicons-admin-site'
     ) );
   }
 

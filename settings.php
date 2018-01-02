@@ -87,7 +87,7 @@ function sfs_upgrade() {
 add_action( 'activate_' . SFS_PLUGIN_BASENAME, 'sfs_install' );
 
 function sfs_install() {
-  if ( $opt = get_option( 'sprites-social-feed' ) ) {
+  if ( $opt = get_option( 'sfs-feed' ) ) {
     return;
   }
 
