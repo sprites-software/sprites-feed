@@ -15,7 +15,7 @@
 	}
 	.Navigation .Navigation-item {
 		display: block;
-		padding: 1rem;
+		padding: 1rem 2rem;
 		background: #fff;
 		border: 1px solid #efefef;
 		color: #000;
