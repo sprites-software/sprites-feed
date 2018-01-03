@@ -18,7 +18,7 @@ if ( isset( $_GET['settings-updated'] ) ) {
 
 	<form action="options.php" method="post">
       <?php
-      settings_fields( 'sfs-option-group' );
+      settings_fields( 'sfs-yt-option-group' );
       do_settings_sections( 'sfs-feed-yt-settings' );
       submit_button( 'Save Settings' );
       ?>

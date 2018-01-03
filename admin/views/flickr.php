@@ -17,7 +17,7 @@ if ( isset( $_GET['settings-updated'] ) ) {
 
 	<form action="options.php" method="post">
       <?php
-      settings_fields( 'sfs-option-group' );
+      settings_fields( 'sfs-flickr-option-group' );
       do_settings_sections( 'sfs-feed-flickr-settings' );
       submit_button( 'Save Settings' );
       ?>

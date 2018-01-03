@@ -25,7 +25,7 @@ function sfs_admin_fb_options() {
 add_action('admin_init', 'sfs_admin_yt_options');
 
 function sfs_admin_yt_options() {
-  register_setting( 'sfs-option-group', 'sfs-yt-credentials' );
+  register_setting( 'sfs-yt-option-group', 'sfs-yt-credentials' );
   add_settings_section('sfs-section-yt-app', __( 'Youtube API settings', 'sfs-feed' ), 'sfs_render_settings_section', 'sfs-feed-yt-settings');
   add_settings_field('sfs-yt-api-key', __( 'Api Key', 'sfs-feed' ), 'sfs_render_yt_settings_field', 'sfs-feed-yt-settings', 'sfs-section-yt-app', ['label_for' => 'sfs-yt-api-key',]);
 
@@ -36,7 +36,7 @@ function sfs_admin_yt_options() {
 add_action('admin_init', 'sfs_admin_flickr_options');
 
 function sfs_admin_flickr_options() {
-  register_setting( 'sfs-option-group', 'sfs-flickr-credentials' );
+  register_setting( 'sfs-flickr-option-group', 'sfs-flickr-credentials' );
   add_settings_section('sfs-section-flickr-app', __( 'Flickr App settings', 'sfs-feed' ), 'sfs_render_settings_section', 'sfs-feed-flickr-settings');
   add_settings_field('sfs-flickr-api-key', __( 'API Key', 'sfs-feed' ), 'sfs_render_flickr_settings_field', 'sfs-feed-flickr-settings', 'sfs-section-flickr-app', ['label_for' => 'sfs-flickr-api-key',]);
   add_settings_field('sfs-flickr-api-secret', __( 'API Secret', 'sfs-feed' ), 'sfs_render_flickr_settings_field', 'sfs-feed-flickr-settings', 'sfs-section-flickr-app', ['label_for' => 'sfs-flickr-api-secret',]);
@@ -45,7 +45,7 @@ function sfs_admin_flickr_options() {
 add_action('admin_init', 'sfs_admin_twitter_options');
 
 function sfs_admin_twitter_options() {
-  register_setting( 'sfs-option-group', 'sfs-twitter-credentials' );
+  register_setting( 'sfs-twitter-option-group', 'sfs-twitter-credentials' );
   add_settings_section('sfs-section-api-key', __( 'Twitter API key settings', 'sfs-feed' ), 'sfs_render_settings_section', 'sfs-feed-twitter-settings');
   add_settings_field('sfs-api-oa-token', __( 'API OAuth Token', 'sfs-feed' ),'sfs_render_settings_field','sfs-feed-twitter-settings', 'sfs-section-api-key', ['label_for' => 'sfs-api-oa-token',]);
   add_settings_field('sfs-api-oa-token-secret', __( 'API OAuth Token Secret', 'sfs-feed' ), 'sfs_render_settings_field', 'sfs-feed-twitter-settings', 'sfs-section-api-key', ['label_for' => 'sfs-api-oa-token-secret',]);

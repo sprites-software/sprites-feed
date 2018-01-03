@@ -18,7 +18,7 @@
 
 	<form action="options.php" method="post">
       <?php
-      settings_fields( 'sfs-option-group' );
+      settings_fields( 'sfs-twitter-option-group' );
       do_settings_sections( 'sfs-feed-twitter-settings' );
       submit_button( 'Save Settings' );
       ?>
