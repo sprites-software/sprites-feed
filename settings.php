@@ -2,6 +2,7 @@
 
 require_once SFS_PLUGIN_DIR . '/includes/functions.php';
 require_once SFS_PLUGIN_DIR . '/includes/capabilities.php';
+require_once SFS_PLUGIN_DIR . '/includes/l10n.php';
 
 if ( is_admin() ) {
   require_once SFS_PLUGIN_DIR . '/admin/admin.php';
@@ -54,7 +55,7 @@ class SFS {
 add_action( 'plugins_loaded', 'sfs' );
 
 function sfs() {
-//  wpcf7_load_textdomain();
+  sfs_load_textdomain();
   SFS::load_modules();
 }
 
@@ -91,7 +92,7 @@ function sfs_install() {
     return;
   }
 
-//  sfs_load_textdomain();
+  sfs_load_textdomain();
   sfs_register_post_types();
   sfs_upgrade();
 

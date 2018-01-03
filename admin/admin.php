@@ -3,42 +3,200 @@
 //require_once SFS_PLUGIN_DIR . '/admin/includes/admin-functions.php';
 //require_once SFS_PLUGIN_DIR . '/admin/includes/SFSHelpTabs.php';
 //require_once SFS_PLUGIN_DIR . '/admin/includes/tag-generator.php';
-//require_once SFS_PLUGIN_DIR . '/admin/includes/SFSWelcomePanel.php';
+require_once SFS_PLUGIN_DIR . '/admin/includes/SFSActivationPanel.php';
 
 add_action( 'admin_init', 'sfs_admin_init' );
 
 function sfs_admin_init() {
-  do_action( 'sfs_admin_init' );
+	do_action( 'sfs_admin_init' );
+}
+
+add_action('admin_init', 'sfs_admin_fb_options');
+
+function sfs_admin_fb_options() {
+  // register a new setting for "sfs" page
+  register_setting( 'sfs-option-group', 'sfs-fb-credentials' );
+
+  // register a new section in the "sfs-feed-twitter-settings" page
+  add_settings_section(
+    'sfs-section-fb-app',
+    __( 'Facebook App settings', 'sfs-feed' ),
+    'sfs_render_settings_section',
+    'sfs-feed-fb-settings'
+  );
+
+  add_settings_field(
+    'sfs-fb-app-id',
+    __( 'App ID', 'sfs-feed' ),
+    'sfs_render_fb_settings_field',
+    'sfs-feed-fb-settings',
+    'sfs-section-fb-app',
+    [
+      'label_for' => 'sfs-fb-app-id',
+    ]
+  );
+  add_settings_field(
+    'sfs-fb-app-secret',
+    __( 'App Secret', 'sfs-feed' ),
+    'sfs_render_fb_settings_field',
+    'sfs-feed-fb-settings',
+    'sfs-section-fb-app',
+    [
+      'label_for' => 'sfs-fb-app-secret',
+    ]
+  );
+}
+
+add_action('admin_init', 'sfs_admin_twitter_options');
+
+function sfs_admin_twitter_options() {
+  // register a new setting for "sfs" page
+  register_setting( 'sfs-option-group', 'sfs-twitter-credentials' );
+
+  // register a new section in the "sfs-feed-twitter-settings" page
+  add_settings_section(
+    'sfs-section-api-key',
+    __( 'Twitter API key settings', 'sfs-feed' ),
+    'sfs_render_settings_section',
+    'sfs-feed-twitter-settings'
+  );
+
+  add_settings_field(
+    'sfs-api-oa-token', // as of WP 4.6 this value is used only internally
+    // use $args' label_for to populate the id inside the callback
+    __( 'API OAuth Token', 'sfs-feed' ),
+    'sfs_render_settings_field',
+    'sfs-feed-twitter-settings',
+    'sfs-section-api-key',
+    [
+      'label_for' => 'sfs-api-oa-token',
+    ]
+  );
+  add_settings_field(
+    'sfs-api-oa-token-secret',
+    __( 'API OAuth Token Secret', 'sfs-feed' ),
+    'sfs_render_settings_field',
+    'sfs-feed-twitter-settings',
+    'sfs-section-api-key',
+    [
+      'label_for' => 'sfs-api-oa-token-secret',
+    ]
+  );
+  add_settings_field(
+    'sfs-api-oa-consumer-key',
+    __( 'API Consumer Key', 'sfs-feed' ),
+    'sfs_render_settings_field',
+    'sfs-feed-twitter-settings',
+    'sfs-section-api-key',
+    [
+      'label_for' => 'sfs-api-oa-consumer-key',
+    ]
+  );
+  add_settings_field(
+    'sfs-api-oa-consumer-key-secret',
+    __( 'API Consumer Key Secret', 'sfs-feed' ),
+    'sfs_render_settings_field',
+    'sfs-feed-twitter-settings',
+    'sfs-section-api-key',
+    [
+      'label_for' => 'sfs-api-oa-consumer-key-secret',
+    ]
+  );
+}
+
+function sfs_render_settings_section( $args ) {
+  ?>
+	<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Configure your application access keys and configure API calls', 'sfs-feed' ); ?></p>
+  <?php
+}
+
+function sfs_render_settings_field($args)
+{
+  $options = get_option('sfs-twitter-credentials');
+  $value = (isset($options[esc_attr($args['label_for'])])) ? $options[esc_attr($args['label_for'])] : '';
+  // output the field
+  ?>
+	<div class="form-group">
+		<input type="text"
+		       id="<?php echo esc_attr($args['label_for']); ?>"
+		       name="sfs-twitter-credentials[<?php echo esc_attr($args['label_for']); ?>]"
+		       value="<?php echo $value; ?>"
+		>
+	</div>
+  <?php
+}
+function sfs_render_fb_settings_field($args) {
+  $options = get_option( 'sfs-fb-credentials' );
+  $value = (isset($options[esc_attr($args['label_for'])])) ? $options[esc_attr($args['label_for'])] : '';
+  // output the field
+  ?>
+  <div class="form-group">
+	  <input type="text"
+	         id="<?php echo esc_attr( $args['label_for'] ); ?>"
+	         name="sfs-twitter-credentials[<?php echo esc_attr($args['label_for']); ?>]"
+	         value="<?php echo $value; ?>"
+	  >
+  </div>
+  <?php
 }
 
 add_action( 'admin_menu', 'sfs_admin_menu', 9 );
 
 function sfs_admin_menu() {
-  global $_wp_last_object_menu;
-
-  $_wp_last_object_menu++;
 
   add_menu_page( __( 'Social Feed', 'sfs-feed' ),
+    __( 'Social Feed', 'sfs-feed' ),
+    'sfs_full_capability', 'sfs-feed',
+    'sfs_admin_global_settings_page', 'dashicons-admin-site',
+    1000 );
+
+  $settings = add_submenu_page( 'sfs-feed',
+    __( 'Global Settings', 'sfs-feed' ),
     __( 'Settings', 'sfs-feed' ),
     'sfs_full_capability', 'sfs-feed',
-    'sfs_admin_management_page', 'dashicons-admin-site',
-    $_wp_last_object_menu );
+    'sfs_admin_global_settings_page' );
 
-  $edit = add_submenu_page( 'sfs-feed',
-    __( 'Twitter Settings', 'sfs-feed' ),
-    __( 'Twitter', 'sfs-feed' ),
-    'sfs_read_capability', 'sfs-feed-twitter-settings',
-    'sfs_admin_twitter_settings_page' );
+  add_action( 'load-' . $settings, 'sfs_load_page_admin' );
 
-  add_action( 'load-' . $edit, 'sfs_load_page_admin' );
-
-  $global = add_submenu_page( 'sfs-feed',
+  $fb = add_submenu_page( 'sfs-feed',
     __( 'Facebook Settings', 'sfs-feed' ),
     __( 'Facebook', 'sfs-feed' ),
     'sfs_full_capability', 'sfs-feed-fb-settings',
     'sfs_admin_fb_settings_page' );
 
-  add_action( 'load-' . $global, 'sfs_load_page_admin' );
+  add_action( 'load-' . $fb, 'sfs_load_page_admin' );
+
+  $twitter = add_submenu_page( 'sfs-feed',
+    __( 'Twitter Settings', 'sfs-feed' ),
+    __( 'Twitter', 'sfs-feed' ),
+    'sfs_full_capability', 'sfs-feed-twitter-settings',
+    'sfs_admin_twitter_settings_page' );
+
+  add_action( 'load-' . $twitter, 'sfs_load_page_admin' );
+
+  $flickr = add_submenu_page( 'sfs-feed',
+    __( 'Flickr Settings', 'sfs-feed' ),
+    __( 'Flickr', 'sfs-feed' ),
+    'sfs_full_capability', 'sfs-feed-flickr-settings',
+    'sfs_admin_flickr_settings_page' );
+
+  add_action( 'load-' . $flickr, 'sfs_load_page_admin' );
+
+  $insta = add_submenu_page( 'sfs-feed',
+    __( 'Instagram Settings', 'sfs-feed' ),
+    __( 'Instagram', 'sfs-feed' ),
+    'sfs_full_capability', 'sfs-feed-insta-settings',
+    'sfs_admin_insta_settings_page' );
+
+  add_action( 'load-' . $insta, 'sfs_load_page_admin' );
+
+  $yt = add_submenu_page( 'sfs-feed',
+    __( 'Youtube Settings', 'sfs-feed' ),
+    __( 'Youtube', 'sfs-feed' ),
+    'sfs_full_capability', 'sfs-feed-yt-settings',
+    'sfs_admin_yt_settings_page' );
+
+  add_action( 'load-' . $yt, 'sfs_load_page_admin' );
 
 }
 
@@ -68,48 +226,29 @@ function sfs_admin_enqueue_scripts( $hook_suffix ){
   }
 }
 
-function sfs_admin_management_page() {
-	?>
-  <div class="wrap">
-
-    <h1 class="wp-heading-inline">
-      <?php echo esc_html( __( 'Social Feed by Sprites', 'sfs-feed' ) ); ?>
-    </h1>
-
-    <hr class="wp-header-end">
-
-    <?php //do_action( 'sfs_admin_warnings' ); ?>
-	<?php //sfs_welcome_panel(); ?>
-    <?php //do_action( 'sfs_admin_notices' ); ?>
-
-  </div>
-  <?php
+function sfs_admin_global_settings_page() {
+  include_once( SFS_PLUGIN_DIR . '/admin/views/settings.php');
 }
 
 function sfs_admin_twitter_settings_page() {
-  ?>
-	<div class="wrap">
-
-		<h1><?php echo esc_html( __( 'Twitter API Settings', 'sfs-feed' ) ); ?></h1>
-
-      <?php do_action( 'sfs_admin_warnings' ); ?>
-      <?php do_action( 'sfs_admin_notices' ); ?>
-
-	</div>
-  <?php
+  include_once( SFS_PLUGIN_DIR . '/admin/views/twitter.php');
 }
 
 function sfs_admin_fb_settings_page() {
-  ?>
-  <div class="wrap">
+  include_once( SFS_PLUGIN_DIR . '/admin/views/facebook.php');
+}
 
-    <h1><?php echo esc_html( __( 'Facebook API Settings', 'sfs-feed' ) ); ?></h1>
+function sfs_admin_insta_settings_page() {
+  include_once( SFS_PLUGIN_DIR . '/admin/views/instagram.php');
 
-    <?php do_action( 'sfs_admin_warnings' ); ?>
-    <?php do_action( 'sfs_admin_notices' ); ?>
+}
 
-  </div>
-  <?php
+function sfs_admin_yt_settings_page() {
+  include_once( SFS_PLUGIN_DIR . '/admin/views/youtube.php');
+}
+
+function sfs_admin_flickr_settings_page() {
+  include_once( SFS_PLUGIN_DIR . '/admin/views/flickr.php');
 }
 
 /* Misc */
