@@ -18,12 +18,8 @@
 
 	<form action="options.php" method="post">
       <?php
-      // output security fields for the registered setting "wporg"
       settings_fields( 'sfs-option-group' );
-      // output setting sections and their fields
-      // (sections are registered for "wporg", each field is registered to a specific section)
       do_settings_sections( 'sfs-feed-twitter-settings' );
-      // output save settings button
       submit_button( 'Save Settings' );
       ?>
 	</form>

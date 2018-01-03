@@ -1,5 +1,6 @@
 <style>
 	.Plugin {
+		padding-top: 1rem;
 		position: relative;
 		margin-right: 1rem;
 		box-sizing: border-box;

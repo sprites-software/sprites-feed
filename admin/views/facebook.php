@@ -3,7 +3,6 @@ if ( ! current_user_can( 'manage_options' ) ) {
   return;
 }
 if ( isset( $_GET['settings-updated'] ) ) {
-  // add settings saved message with the class of "updated"
   add_settings_error( 'sfs_messages', 'sfs_message', __( 'Settings Saved', 'sfs-feed' ), 'updated' );
 }
 ?>
@@ -18,12 +17,8 @@ if ( isset( $_GET['settings-updated'] ) ) {
 
 	<form action="options.php" method="post">
       <?php
-      // output security fields for the registered setting "wporg"
       settings_fields( 'sfs-option-group' );
-      // output setting sections and their fields
-      // (sections are registered for "wporg", each field is registered to a specific section)
       do_settings_sections( 'sfs-feed-fb-settings' );
-      // output save settings button
       submit_button( 'Save Settings' );
       ?>
 	</form>
