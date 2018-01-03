@@ -1,6 +1,6 @@
 <?php
 
-use SFS\Entity\SpritesSocialFeed;
+use SFS\entity\SpritesSocialFeed;
 
 function sfs_plugin_path( $path = '' ) {
   return path_join( WPCF7_PLUGIN_DIR, trim( $path, '/' ) );

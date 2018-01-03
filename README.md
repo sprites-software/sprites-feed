@@ -16,5 +16,5 @@ yarn watch
 ```
 
 ## Changelog
-- [v0.1](#) - Add plugin structure and basic components
 - [v0.1.1](#) - Fix activation issues, settings
+- [v0.1](#) - Add plugin structure and basic components
