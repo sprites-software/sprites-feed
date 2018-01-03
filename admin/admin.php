@@ -28,6 +28,9 @@ function sfs_admin_yt_options() {
   register_setting( 'sfs-option-group', 'sfs-yt-credentials' );
   add_settings_section('sfs-section-yt-app', __( 'Youtube API settings', 'sfs-feed' ), 'sfs_render_settings_section', 'sfs-feed-yt-settings');
   add_settings_field('sfs-yt-api-key', __( 'Api Key', 'sfs-feed' ), 'sfs_render_yt_settings_field', 'sfs-feed-yt-settings', 'sfs-section-yt-app', ['label_for' => 'sfs-yt-api-key',]);
+
+  add_settings_section('sfs-section-yt-config', __( 'Youtube API configuration', 'sfs-feed' ), 'sfs_render_secondary_settings_section', 'sfs-feed-yt-settings');
+  add_settings_field('sfs-yt-playlist-id', __( 'Playlist ID', 'sfs-feed' ), 'sfs_render_yt_settings_field', 'sfs-feed-yt-settings', 'sfs-section-yt-config', ['label_for' => 'sfs-yt-api-key',]);
 }
 
 add_action('admin_init', 'sfs_admin_flickr_options');
@@ -53,6 +56,12 @@ function sfs_admin_twitter_options() {
 function sfs_render_settings_section( $args ) {
   ?>
 	<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Configure your application access keys and configure API calls', 'sfs-feed' ); ?></p>
+  <?php
+}
+
+function sfs_render_secondary_settings_section( $args ) {
+  ?>
+	<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Configure what should be included in the response', 'sfs-feed' ); ?></p>
   <?php
 }
 
