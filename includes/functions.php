@@ -187,6 +187,10 @@ function sfs_register_post_types() {
   }
 }
 
+function sfs_start_cron_jobs() {
+  new
+}
+
 function sfs_version( $args = '' ) {
   $defaults = array(
     'limit' => -1,

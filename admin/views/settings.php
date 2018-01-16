@@ -61,3 +61,16 @@
 		</div>
 	</div>
 </div>
+<div class="wrap">
+  <?php settings_errors( 'sfs_messages' ); ?>
+  <?php do_action( 'sfs_admin_warnings' ); ?>
+  <?php do_action( 'sfs_admin_notices' ); ?>
+
+	<form action="options.php" method="post">
+      <?php
+      settings_fields( 'sfs-global' );
+      do_settings_sections( 'sfs-feed' );
+      submit_button( 'Save Settings' );
+      ?>
+	</form>
+</div>

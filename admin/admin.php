@@ -11,6 +11,18 @@ function sfs_admin_init() {
 	do_action( 'sfs_admin_init' );
 }
 
+add_action('admin_init', 'sfs_global_options');
+
+function sfs_global_options() {
+	$post_types = get_post_types([
+		'public' => true
+	]);
+	register_setting('sfs-global', 'sfs-global-options');
+	add_settings_section('sfs-global-settings', __('Global Settings', 'sfs-feed'), null, 'sfs-feed');
+	add_settings_field('sfs-last-import-date', __('Last import date', 'sfs-feed'), 'sfs_render_global_setting', 'sfs-feed', 'sfs-global-settings', ['label_for' => 'sfs-last-import-date']);
+	add_settings_field('sfs-post-type', __('Add to post type', 'sfs-feed'), 'sfs_render_post_setting', 'sfs-feed', 'sfs-global-settings', ['label_for' => 'sfs-post-type', 'post_types' => $post_types]);
+}
+
 add_action('admin_init', 'sfs_admin_fb_options');
 
 function sfs_admin_fb_options() {
@@ -83,9 +95,34 @@ function sfs_render_secondary_settings_section( $args ) {
 	<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Configure what should be included in the response', 'sfs-feed' ); ?></p>
   <?php
 }
-
-function sfs_render_settings_field($args)
-{
+function sfs_render_post_setting($args) {
+  $options = get_option( 'sfs-global-options' );
+  ?>
+	<div class="form-group">
+		<select id="<?php echo esc_attr( $args['label_for'] ); ?>" name="sfs-global-options[<?php echo esc_attr($args['label_for']); ?>]">
+          <?php foreach($args['post_types'] as $k => $v) : ?>
+			  <option value="<?php echo $k; ?>" <?php isset( $options[ esc_attr($args['label_for']) ] ) ? ( selected( $options[ $args['label_for'] ], $k, true ) ) : ( '' ); ?>>
+                <?php esc_html_e( $v, 'sfs-feed' ); ?>
+			  </option>
+          <?php endforeach; ?>
+		</select>
+	</div>
+  <?php
+}
+function sfs_render_global_setting($args) {
+  $options = get_option('sfs-global-options');
+  $value = (isset($options[esc_attr($args['label_for'])])) ? $options[esc_attr($args['label_for'])] : '';
+  ?>
+    <div class="form-group">
+	    <input readonly type="text"
+	           id="<?php echo esc_attr($args['label_for']); ?>"
+	           name="sfs-global-options[<?php echo esc_attr($args['label_for']); ?>]"
+	           value="<?php echo $value; ?>"
+	    >
+    </div>
+  <?php
+}
+function sfs_render_settings_field($args){
   $options = get_option('sfs-twitter-credentials');
   $value = (isset($options[esc_attr($args['label_for'])])) ? $options[esc_attr($args['label_for'])] : '';
   // output the field
@@ -179,6 +216,8 @@ function sfs_render_yt_settings_number($args) {
   ?>
   <div class="form-group">
 	  <input type="number"
+	         max="50"
+	         min="1"
 	         id="<?php echo esc_attr( $args['label_for'] ); ?>"
 	         name="sfs-yt-credentials[<?php echo esc_attr($args['label_for']); ?>]"
 	         value="<?php echo $value; ?>"

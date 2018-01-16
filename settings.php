@@ -13,7 +13,7 @@ if ( is_admin() ) {
 class SFS {
 
   public static function load_modules() {
-    self::load_module( 'module' );
+    self::load_module( 'cron' );
   }
 
   protected static function load_module( $mod ) {
