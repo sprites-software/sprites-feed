@@ -8,7 +8,7 @@ require_once SFS_PLUGIN_DIR . '/admin/includes/SFSActivationPanel.php';
 add_action( 'admin_init', 'sfs_admin_init' );
 
 function sfs_admin_init() {
-	do_action( 'sfs_admin_init' );
+  do_action( 'sfs_admin_init' );
 }
 
 add_action('admin_init', 'sfs_global_options');
@@ -19,7 +19,7 @@ function sfs_global_options() {
 	]);
 	register_setting('sfs-global', 'sfs-global-options');
 	add_settings_section('sfs-global-settings', __('Global Settings', 'sfs-feed'), null, 'sfs-feed');
-	add_settings_field('sfs-last-import-date', __('Last import date', 'sfs-feed'), 'sfs_render_global_setting', 'sfs-feed', 'sfs-global-settings', ['label_for' => 'sfs-last-import-date']);
+	add_settings_field('sfs-last-import-date', __('Last import date', 'sfs-feed'), 'sfs_render_global_setting', 'sfs-feed', 'sfs-global-settings', ['label_for' => 'sfs-last-import-date', 'default_value' => '0']);
 	add_settings_field('sfs-post-type', __('Add to post type', 'sfs-feed'), 'sfs_render_post_setting', 'sfs-feed', 'sfs-global-settings', ['label_for' => 'sfs-post-type', 'post_types' => $post_types]);
 }
 
@@ -111,7 +111,7 @@ function sfs_render_post_setting($args) {
 }
 function sfs_render_global_setting($args) {
   $options = get_option('sfs-global-options');
-  $value = (isset($options[esc_attr($args['label_for'])])) ? $options[esc_attr($args['label_for'])] : '';
+  $value = (isset($options[esc_attr($args['label_for'])])) ? $options[esc_attr($args['label_for'])] : 0;
   ?>
     <div class="form-group">
 	    <input readonly type="text"
@@ -283,7 +283,9 @@ function sfs_admin_enqueue_scripts( $hook_suffix ){
     return;
   }
 }
-
+/*
+ * Add Admin Page views
+ */
 function sfs_admin_global_settings_page() {
   include_once( SFS_PLUGIN_DIR . '/admin/views/settings.php');
 }

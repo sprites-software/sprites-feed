@@ -18,6 +18,8 @@ class FacebookApi {
 
   private $public_events;
 
+  private $page;
+
   public function __construct() {
     $this->public_posts = [];
   }
@@ -62,12 +64,21 @@ class FacebookApi {
     return $this->public_events;
   }
 
+  public function setPage($page) {
+    $this->page = $page;
+  }
+
+  public function getPage() {
+    return $this->page;
+  }
+
   public function sendRequest() {
     $fb = $this->getFb();
     $app = $this->getFbApp();
     $token = $this->getAccessToken();
+    $page = $this->getPage();
 
-    $request = new FacebookRequest($app, $token, 'GET', '/MirekPrezident.cz/?fields=posts{message,created_time,picture,id,full_picture,type,attachments}');
+    $request = new FacebookRequest($app, $token, 'GET', '/'.$page.'/?fields=posts{message,created_time,picture,id,full_picture,type,attachments}');
 
     // Send the request to Graph
     try {
