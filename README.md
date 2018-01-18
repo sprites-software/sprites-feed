@@ -16,6 +16,7 @@ yarn watch
 ```
 
 ## Changelog
+- [v0.2](#) - Facebook API connect (v2.1), Post type settings, general fixes
 - [v0.1.2](#) - Add admin settings and admin views
 - [v0.1.1](#) - Fix activation issues, settings
 - [v0.1](#) - Add plugin structure and basic components

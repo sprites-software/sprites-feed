@@ -11,7 +11,7 @@
   Text Domain:  sfs-feed
 */
 
-define( 'SFS_PLUGIN_VERSION', '0.1.1' );
+define( 'SFS_PLUGIN_VERSION', '0.2' );
 
 define( 'SFS_REQUIRED_WP_VERSION', '4.7' );
 
