@@ -17,7 +17,7 @@ if ( is_admin() ) {
 class SFS {
 
   public static function load_modules() {
-//    self::load_module( 'cron' );
+//    self::load_module( 'module' );
   }
 
   protected static function load_module( $mod ) {
@@ -69,9 +69,6 @@ function sfs_init() {
   sfs_get_request_uri();
   sfs_register_post_types();
   sfs_start_cron_jobs();
-
-//  var_dump(sfs_cron_persist_twitter_feed_posts());
-
   do_action( 'sfs_init' );
 }
 
