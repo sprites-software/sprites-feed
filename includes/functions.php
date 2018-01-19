@@ -1,13 +1,20 @@
 <?php
 
+require_once( SFS_PLUGIN_DIR . '/vendor/autoload.php' );
+
+use Facebook\Facebook;
+use SFS\entity\FacebookApi;
+use SFS\entity\TwitterApi;
+use SFS\entity\FlickrApi;
+use SFS\entity\YoutubeApi;
 use SFS\entity\SpritesSocialFeed;
 
 function sfs_plugin_path( $path = '' ) {
-  return path_join( WPCF7_PLUGIN_DIR, trim( $path, '/' ) );
+  return path_join( SFS_PLUGIN_DIR, trim( $path, '/' ) );
 }
 
 function sfs_plugin_url( $path = '' ) {
-  $url = plugins_url( $path, WPCF7_PLUGIN );
+  $url = plugins_url( $path, SFS_PLUGIN );
 
   if ( is_ssl() && 'http:' == substr( $url, 0, 5 ) ) {
     $url = 'https:' . substr( $url, 5 );
@@ -93,7 +100,7 @@ function sfs_flat_join( $input ) {
 }
 
 function sfs_support_html5() {
-  return (bool) apply_filters( 'wpcf7_support_html5', true );
+  return (bool) apply_filters( 'sfs_support_html5', true );
 }
 
 function sfs_support_html5_fallback() {
@@ -185,6 +192,312 @@ function sfs_register_post_types() {
   } else {
     return false;
   }
+}
+
+function sfs_start_cron_jobs() {
+  $option_fb = get_option('sfs-fb-credentials');
+  $option_yt = get_option('sfs-yt-credentials');
+  $option_flickr = get_option('sfs-flickr-credentials');
+  $option_twitter = get_option('sfs-twitter-credentials');
+
+  add_action( 'sfs_cron_hook', 'sfs_cron_persist_feed_posts' );
+  add_action( 'sfs_cron_hook_secondary', 'sfs_cron_persist_twitter_feed_posts' );
+  add_action( 'sfs_cron_hook_events', 'sfs_cron_persist_social_events' );
+  add_action( 'sfs_cron_hook_videos', 'sfs_cron_persist_videos' );
+  add_action( 'sfs_cron_hook_albums', 'sfs_cron_persist_albums' );
+
+  if ( ! wp_next_scheduled( 'sfs_cron_hook' ) && (isset($option_fb['sfs-enable-service'])) ) {
+    if(isset($option_fb['sfs-fb-user-fields']) && ($option_fb['sfs-fb-user-fields'] == 'posts')) {
+      wp_schedule_event(time(), 'hourly', 'sfs_cron_hook');
+    } else if(isset($option_fb['sfs-fb-user-fields']) && ($option_fb['sfs-fb-user-fields'] == 'events')) {
+      wp_schedule_event(time(), 'hourly', 'sfs_cron_hook_events');
+    }
+  }
+  if ( ! wp_next_scheduled( 'sfs_cron_hook_secondary' ) && (isset($option_twitter['sfs-enable-service'])) ) {
+    wp_schedule_event( time(), 'hourly', 'sfs_cron_hook_secondary' );
+  }
+  if ( ! wp_next_scheduled( 'sfs_cron_hook_videos' ) && (isset($option_yt['sfs-enable-service'])) ) {
+    wp_schedule_event( time(), 'hourly', 'sfs_cron_hook_videos' );
+  }
+  if ( ! wp_next_scheduled( 'sfs_cron_hook_albums' ) && (isset($option_flickr['sfs-enable-service'])) ) {
+    wp_schedule_event( time(), 'hourly', 'sfs_cron_hook_albums' );
+  }
+}
+
+function sfs_get_facebook_feed_posts() {
+  $option = get_option('sfs-fb-credentials');
+  $app_id = $option['sfs-fb-app-id'];
+  $app_secret = $option['sfs-fb-app-secret'];
+  $page = $option['sfs-fb-user-id'];
+
+  $fb = new Facebook([
+    'app_id' => $app_id,
+    'app_secret' => $app_secret,
+    'default_graph_version' => 'v2.3',
+  ]);
+  $api = new FacebookApi();
+  $api->setPage($page);
+  $api->setFb($fb);
+  $api->setFbApp($fb->getApp());
+  $api->setAccessToken($api->getFbApp()->getAccessToken());
+  $api->sendRequest();
+
+  return (isset($option['sfs-enable-service'])) ? $api->getPublicPosts() : [];
+}
+
+function sfs_get_facebook_events() {
+  $option = get_option('sfs-fb-credentials');
+  $app_id = $option['sfs-fb-app-id'];
+  $app_secret = $option['sfs-fb-app-secret'];
+  $page = $option['sfs-fb-user-id'];
+
+  $fb = new Facebook([
+    'app_id' => $app_id,
+    'app_secret' => $app_secret,
+    'default_graph_version' => 'v2.3',
+  ]);
+  $api = new FacebookApi();
+  $api->setPage($page);
+  $api->setFb($fb);
+  $api->setFbApp($fb->getApp());
+  $api->setAccessToken($api->getFbApp()->getAccessToken());
+  $api->sendEventRequest();
+
+  return (isset($option['sfs-enable-service'])) ? $api->getPublicEvents() : [];
+}
+
+function sfs_get_youtube_videos() {
+  $option = get_option('sfs-yt-credentials');
+  $api_key = $option['sfs-yt-api-key'];
+  $playlist_id = $option['sfs-yt-playlist-id'];
+  $max = $option['sfs-yt-max'];
+
+  $yt = new YoutubeApi();
+  $yt->setClient(new \Google_Client());
+  $yt->setApiKey($api_key);
+  $yt->setService(new Google_Service_YouTube($yt->getClient()));
+
+  $videos = $yt->sendRequest($yt->getService(), 'snippet,contentDetails', ['playlistId' => $playlist_id, 'maxResults' => $max]);
+  $yt->setVideos($videos);
+
+  return (isset($option['sfs-enable-service'])) ? $yt->getVideos() : [];
+}
+
+function sfs_get_flickr_photosets() {
+  $option = get_option('sfs-flickr-credentials');
+  $api_key = $option['sfs-flickr-api-key'];
+  $user_id = $option['sfs-flickr-user'];
+
+  $flickr = new FlickrApi();
+  $flickr->setEncodedParams([
+    'api_key' => $api_key,
+    'method' => 'flickr.photosets.getList',
+    'user_id' => $user_id,
+    'format' => 'php_serial'
+  ]);
+  $flickr->sendRequest();
+
+  return (isset($option['sfs-enable-service'])) ? $flickr->getResponse() : [];
+}
+
+function sfs_get_flickr_photos($id) {
+  $option = get_option('sfs-flickr-credentials');
+  $api_key = $option['sfs-flickr-api-key'];
+  $user_id = $option['sfs-flickr-user'];
+
+  $flickr = new FlickrApi();
+  $flickr->setEncodedParams([
+    'api_key' => $api_key,
+    'method' => 'flickr.photosets.getPhotos',
+    'photoset_id' => $id,
+    'user_id' => $user_id,
+    'format' => 'php_serial'
+  ]);
+  $flickr->sendRequest();
+
+  return (isset($option['sfs-enable-service'])) ? $flickr->getResponse() : [];
+}
+
+function sfs_get_twitter_feed_posts() {
+  $option = get_option('sfs-twitter-credentials');
+
+  $twitter = new TwitterApi();
+  $twitter->setApi(new TwitterAPIExchange([
+    'oauth_access_token' => $option['sfs-api-oa-token'],
+    'oauth_access_token_secret' => $option['sfs-api-oa-token-secret'],
+    'consumer_key' => $option['sfs-api-oa-consumer-key'],
+    'consumer_secret' => $option['sfs-api-oa-consumer-key-secret']
+  ]));
+  $twitter->setUrl('https://api.twitter.com/1.1/statuses/user_timeline.json');
+  $twitter->setField('?screen_name='.$option['sfs-api-screen-name']);
+  $twitter->sendGetRequest();
+
+  return (isset($option['sfs-enable-service'])) ? $twitter->getTweets() : [];
+}
+
+function sfs_cron_persist_albums() {
+  $posts = sfs_get_flickr_photosets();
+  $global = get_option('sfs-global-options');
+  $data = $posts['photosets']['photoset'];
+  $last_import_date = (isset($global['sfs-last-import-date'])) ? date('Y-m-d H:i:s', $global['sfs-last-import-date']) : 0;
+  foreach($data as $gallery) {
+    $timestamp = gmdate('Y-m-d H:i:s', $gallery['date_create']);
+    if(strtotime($timestamp) > strtotime($last_import_date)) {
+      $photos = sfs_get_flickr_photos($gallery['id']);
+      $id = sfs_create_feed_post([
+        'id' => $gallery['id'],
+        'post_type' => $global['sfs-post-type'],
+        'post_title' => 'flickr-post-' . date('d-M-Y', strtotime($timestamp)),
+        'post_content' => $gallery['title']['_content'],
+        'post_status' => 'publish',
+        'post_date' => date('Y-m-d H:i:s', strtotime($timestamp))
+      ]);
+      //        $this->__update_post_meta($id, 'feed_type', 'flickr');
+      //        $this->__update_post_meta($id, 'feed_link', 'https://flickr.com/photos/159828506@N05/albums/'.$gallery['id']);
+      //        $this->__update_post_meta($id, 'feed_picture', 'https://farm'.$photos['photoset']['photo'][0]['farm'].'.staticflickr.com/'.$photos['photoset']['photo'][0]['server'].'/'.$photos['photoset']['photo'][0]['id'].'_'.$photos['photoset']['photo'][0]['secret'].'_z.jpg');
+      //        $this->__update_post_meta($id, 'feed_isVideo', false);
+    }
+    $global['sfs-last-import-date'] = $timestamp;
+    update_option('sfs-global-options', $global);
+  }
+}
+
+function sfs_cron_persist_videos() {
+  $posts = sfs_get_youtube_videos();
+  $global = get_option('sfs-global-options');
+  $data = $posts['items'];
+  $last_import_date = (isset($global['sfs-last-import-date'])) ? date('Y-m-d H:i:s', $global['sfs-last-import-date']) : 0;
+  foreach ($data as $post) {
+    $data = json_decode(json_encode($post), true);
+    $timestamp = date('Y-m-d H:i:s', strtotime($data['contentDetails']['videoPublishedAt']));
+    if((strtotime($timestamp) > strtotime($last_import_date)) && ($data['snippet']['title'] != 'Private video')) {
+      $id = sfs_create_feed_post([
+        'id' => $data['id'],
+        'post_type' => $global['sfs-post-type'],
+        'post_title' => 'youtube-post-' . date('d-M-Y', strtotime($data['contentDetails']['videoPublishedAt'])),
+        'post_content' => $data['snippet']['title'],
+        'post_status' => 'publish',
+        'post_date' => date('Y-m-d H:i:s', strtotime($data['contentDetails']['videoPublishedAt']))
+      ]);
+      //        $this->__update_post_meta($id, 'feed_type', 'youtube');
+      //        $this->__update_post_meta($id, 'feed_link', '<iframe width="560" height="315" src="https://www.youtube.com/embed/'.$data['snippet']['resourceId']['videoId'].'" frameborder="0" gesture="media" allow="encrypted-media" allowfullscreen></iframe>');
+      //        $this->__update_post_meta($id, 'feed_picture', $data['snippet']['thumbnails']['medium']['url']);
+      //        $this->__update_post_meta($id, 'feed_isVideo', true);
+    }
+    $global['sfs-last-import-date'] = $timestamp;
+    update_option('sfs-global-options', $global);
+  }
+}
+
+function sfs_cron_persist_feed_posts() {
+  $posts = sfs_get_facebook_feed_posts();
+  $global = get_option('sfs-global-options');
+  $data = $posts['posts']['data'];
+  $last_import_date = (isset($global['sfs-last-import-date'])) ? date('Y-m-d H:i:s', $global['sfs-last-import-date']) : 0;
+  foreach ($data as $post) {
+    $timestamp = date('Y-m-d H:i:s', strtotime($post['created_time']));
+    if(strtotime($timestamp) > strtotime($last_import_date)) {
+      $id = sfs_create_feed_post([
+        'id' => $post['id'],
+        'post_type' => $global['sfs-post-type'],
+        'post_title' => 'facebook-post-' . date('d-M-Y', strtotime($post['created_time'])),
+        'post_content' => $post['message'],
+        'post_status' => 'publish',
+        'post_date' => $post['created_time']
+      ]);
+      //        $this->__update_post_meta($id, 'feed_type', 'facebook');
+      //        $this->__update_post_meta($id, 'feed_link', ($post['attachments']['data'][0]['target']) ? $post['attachments']['data'][0]['target']['url'] : '');
+      //        $this->__update_post_meta($id, 'feed_picture', ($post['attachments']['data'][0]['media']['image']) ? $post['attachments']['data'][0]['media']['image']['src'] : '');
+
+      if($post['type'] == 'video') {
+        //          $this->__update_post_meta($id, 'feed_isVideo', true);
+      }
+      $global['sfs-last-import-date'] = $timestamp;
+      update_option('sfs-global-options', $global);
+    }
+  }
+}
+
+function sfs_cron_persist_twitter_feed_posts() {
+  $posts = sfs_get_twitter_feed_posts();
+  $data = $posts;
+  $global = get_option('sfs-global-options');
+  $last_import_date = (isset($global['sfs-last-import-date'])) ? date('Y-m-d H:i:s', $global['sfs-last-import-date']) : 0;
+  foreach ($data as $post) {
+    $data = json_decode(json_encode($post), true);
+    $date = date('Y-m-d H:i:s', strtotime($data['created_at']));
+    if((strtotime($date) > strtotime($last_import_date)) && !(preg_match('/^RT/', $data['text']))) {
+      $id = sfs_create_feed_post([
+        'id' => $data['id'],
+        'post_type' => $global['sfs-post-type'],
+        'post_title' => 'twitter-post-' . date('d-M-Y', strtotime($data['created_at'])),
+        'post_content' => $data['text'],
+        'post_status' => 'publish',
+        'post_date' => date('Y-m-d H:i:s', strtotime($data['created_at']))
+      ]);
+      //        $this->__update_post_meta($id, 'feed_type', 'twitter');
+      //        $this->__update_post_meta($id, 'feed_link', 'https://twitter.com/MirekTopolanek/status/'.$data['id_str']);
+      if (isset($data['entities']['media'])) {
+        //          $this->__update_post_meta($id, 'feed_picture', $data['entities']['media'][0]['media_url']);
+      }
+    }
+    $global['sfs-last-import-date'] = $date;
+    update_option('sfs-global-options', $global);
+  }
+}
+
+function sfs_cron_persist_social_events() {
+  $posts = sfs_get_facebook_feed_posts();
+  $global = get_option('sfs-global-options');
+  $data = $posts['posts']['data'];
+  $last_import_date = (isset($global['sfs-last-import-date'])) ? date('Y-m-d H:i:s', $global['sfs-last-import-date']) : 0;
+  foreach ($data as $post) {
+    $timestamp = date('Y-m-d H:i:s', strtotime($post['start_time']));
+    if(strtotime($timestamp) > strtotime($last_import_date)) {
+      $id = sfs_create_feed_post([
+        'id' => $post['id'],
+        'post_type' => $global['sfs-post-type'],
+        'post_title' => $post['name'],
+        'post_content' => $post['description'],
+        'post_status' => 'publish',
+        'post_date' => (strtotime($timestamp) > strtotime(date('Y-m-d H:i:s'))) ? '' : $post['start_time']
+      ]);
+      //        $this->__update_post_meta($id, 'event_link', 'https://facebook.com/events/'.$post['id']);
+      //        $this->__update_post_meta($id, 'event_date', date('d-m-Y H:i:s', strtotime($post['start_time'])));
+      //        $this->__update_post_meta($id, 'event_address', $post['place']['name']);
+    }
+    $global['sfs-last-import-date'] = $timestamp;
+    update_option('sfs-global-options', $global);
+  }
+}
+
+/**
+ * Updates post meta for a post. It also automatically deletes or adds the value to field_name if specified
+ *
+ * @access     protected
+ * @param      integer     The post ID for the post we're updating
+ * @param      string      The field we're updating/adding/deleting
+ * @param      string      [Optional] The value to update/add for field_name. If left blank, data will be deleted.
+ * @return     void
+ */
+function __update_post_meta( $post_id, $field_name, $value = '' )
+{
+  if ( empty( $value ) OR ! $value )
+  {
+    delete_post_meta( $post_id, $field_name );
+  }
+  elseif ( ! get_post_meta( $post_id, $field_name ) )
+  {
+    add_post_meta( $post_id, $field_name, $value );
+  }
+  else
+  {
+    update_post_meta( $post_id, $field_name, $value );
+  }
+}
+
+function sfs_create_feed_post($data) {
+  return wp_insert_post($data);
 }
 
 function sfs_version( $args = '' ) {

@@ -1,5 +1,9 @@
 <?php
 
+require_once SFS_PLUGIN_DIR . '/entity/FacebookApiClass.php';
+require_once SFS_PLUGIN_DIR . '/entity/TwitterApiClass.php';
+require_once SFS_PLUGIN_DIR . '/entity/YoutubeApiClass.php';
+require_once SFS_PLUGIN_DIR . '/entity/FlickrApiClass.php';
 require_once SFS_PLUGIN_DIR . '/includes/functions.php';
 require_once SFS_PLUGIN_DIR . '/includes/capabilities.php';
 require_once SFS_PLUGIN_DIR . '/includes/l10n.php';
@@ -13,7 +17,7 @@ if ( is_admin() ) {
 class SFS {
 
   public static function load_modules() {
-    self::load_module( 'module' );
+//    self::load_module( 'module' );
   }
 
   protected static function load_module( $mod ) {
@@ -64,7 +68,7 @@ add_action( 'init', 'sfs_init' );
 function sfs_init() {
   sfs_get_request_uri();
   sfs_register_post_types();
-
+  sfs_start_cron_jobs();
   do_action( 'sfs_init' );
 }
 
