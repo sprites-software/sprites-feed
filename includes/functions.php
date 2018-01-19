@@ -335,12 +335,15 @@ function sfs_get_twitter_feed_posts() {
   return (isset($option['sfs-enable-service'])) ? $twitter->getTweets() : [];
 }
 
-function sfs_cron_persist_albums($data) {
-  $last_import_date = $this->getLastImportDate();
+function sfs_cron_persist_albums() {
+  $posts = sfs_get_flickr_photosets();
+  $global = get_option('sfs-global-options');
+  $data = $posts['photosets']['photoset'];
+  $last_import_date = (isset($global['sfs-last-import-date'])) ? date('Y-m-d H:i:s', $global['sfs-last-import-date']) : 0;
   foreach($data as $gallery) {
     $timestamp = gmdate('Y-m-d H:i:s', $gallery['date_create']);
     if(strtotime($timestamp) > strtotime($last_import_date)) {
-      $photos = $this->get_flickr_photos($gallery['id']);
+      $photos = sfs_get_flickr_photos($gallery['id']);
       $id = $this->create_feed_post([
         'id' => $gallery['id'],
         'post_type' => 'feed',
@@ -357,8 +360,11 @@ function sfs_cron_persist_albums($data) {
   }
 }
 
-function sfs_cron_persist_videos($data) {
-  $last_import_date = $this->getLastImportDate();
+function sfs_cron_persist_videos() {
+  $posts = sfs_get_youtube_videos();
+  $global = get_option('sfs-global-options');
+  $data = $posts['items'];
+  $last_import_date = (isset($global['sfs-last-import-date'])) ? date('Y-m-d H:i:s', $global['sfs-last-import-date']) : 0;
   foreach ($data as $post) {
     $data = json_decode(json_encode($post), true);
     $timestamp = date('Y-m-d H:i:s', strtotime($data['contentDetails']['videoPublishedAt']));
@@ -381,9 +387,9 @@ function sfs_cron_persist_videos($data) {
 
 function sfs_cron_persist_feed_posts() {
   $posts = sfs_get_facebook_feed_posts();
-  $data = $posts['posts']['data'];
   $global = get_option('sfs-global-options');
-  $last_import_date = $global['sfs-last-import-date'];
+  $data = $posts['posts']['data'];
+  $last_import_date = (isset($global['sfs-last-import-date'])) ? date('Y-m-d H:i:s', $global['sfs-last-import-date']) : 0;
   foreach ($data as $post) {
     $timestamp = date('Y-m-d H:i:s', strtotime($post['created_time']));
     if(strtotime($timestamp) > strtotime($last_import_date)) {
@@ -409,7 +415,10 @@ function sfs_cron_persist_feed_posts() {
 }
 
 function sfs_cron_persist_twitter_feed_posts($data) {
-  $last_import_date = $this->getLastImportDate();
+  $posts = sfs_get_twitter_feed_posts();
+  $data = $posts;
+  $global = get_option('sfs-global-options');
+  $last_import_date = (isset($global['sfs-last-import-date'])) ? date('Y-m-d H:i:s', $global['sfs-last-import-date']) : 0;
   foreach ($data as $post) {
     $data = json_decode(json_encode($post), true);
     $date = date('Y-m-d H:i:s', strtotime($data['created_at']));
@@ -431,8 +440,11 @@ function sfs_cron_persist_twitter_feed_posts($data) {
   }
 }
 
-function sfs_cron_persist_social_events($data) {
-  $last_import_date = $this->getLastImportDate();
+function sfs_cron_persist_social_events() {
+  $posts = sfs_get_facebook_feed_posts();
+  $global = get_option('sfs-global-options');
+  $data = $posts['posts']['data'];
+  $last_import_date = (isset($global['sfs-last-import-date'])) ? date('Y-m-d H:i:s', $global['sfs-last-import-date']) : 0;
   foreach ($data as $post) {
     $timestamp = date('Y-m-d H:i:s', strtotime($post['start_time']));
     if(strtotime($timestamp) > strtotime($last_import_date)) {

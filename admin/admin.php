@@ -119,10 +119,10 @@ function sfs_render_enable_setting($args) {
 	$value = (isset($options[esc_attr($args['label_for'])])) ? $options[esc_attr($args['label_for'])] : false;
 	?>
         <div class="form-group">
-	        <label for="sfs-fb-credentials[<?php echo esc_attr($args['label_for']) ?>]">
+	        <label for="<?php echo esc_attr($args['option']); ?>[<?php echo esc_attr($args['label_for']) ?>]">
 		        <input
 				        type="checkbox"
-				        name="sfs-fb-credentials[<?php echo esc_attr($args['label_for']) ?>]"
+				        name="<?php echo esc_attr($args['option']); ?>[<?php echo esc_attr($args['label_for']) ?>]"
 				        id="<?php echo esc_attr($args['label_for']) ?>"
 		                <?php if($value == 'on') :
 		                    echo 'checked';
