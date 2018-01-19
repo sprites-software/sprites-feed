@@ -137,7 +137,7 @@ function sfs_render_global_setting($args) {
   $value = (isset($options[esc_attr($args['label_for'])])) ? $options[esc_attr($args['label_for'])] : 0;
   ?>
     <div class="form-group">
-	    <input readonly type="text"
+	    <input type="text"
 	           id="<?php echo esc_attr($args['label_for']); ?>"
 	           name="sfs-global-options[<?php echo esc_attr($args['label_for']); ?>]"
 	           value="<?php echo $value; ?>"

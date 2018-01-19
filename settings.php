@@ -70,6 +70,8 @@ function sfs_init() {
   sfs_register_post_types();
   sfs_start_cron_jobs();
 
+//  var_dump(sfs_cron_persist_twitter_feed_posts());
+
   do_action( 'sfs_init' );
 }
 

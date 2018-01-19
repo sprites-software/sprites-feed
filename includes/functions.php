@@ -325,8 +325,8 @@ function sfs_get_twitter_feed_posts() {
   $twitter->setApi(new TwitterAPIExchange([
     'oauth_access_token' => $option['sfs-api-oa-token'],
     'oauth_access_token_secret' => $option['sfs-api-oa-token-secret'],
-    'consumer_key' => $option['sfs-api-consumer-key'],
-    'consumer_secret' => $option['sfs-api-consumer-key-secret']
+    'consumer_key' => $option['sfs-api-oa-consumer-key'],
+    'consumer_secret' => $option['sfs-api-oa-consumer-key-secret']
   ]));
   $twitter->setUrl('https://api.twitter.com/1.1/statuses/user_timeline.json');
   $twitter->setField('?screen_name='.$option['sfs-api-screen-name']);
@@ -344,9 +344,9 @@ function sfs_cron_persist_albums() {
     $timestamp = gmdate('Y-m-d H:i:s', $gallery['date_create']);
     if(strtotime($timestamp) > strtotime($last_import_date)) {
       $photos = sfs_get_flickr_photos($gallery['id']);
-      $id = $this->create_feed_post([
+      $id = sfs_create_feed_post([
         'id' => $gallery['id'],
-        'post_type' => 'feed',
+        'post_type' => $global['sfs-post-type'],
         'post_title' => 'flickr-post-' . date('d-M-Y', strtotime($timestamp)),
         'post_content' => $gallery['title']['_content'],
         'post_status' => 'publish',
@@ -357,6 +357,8 @@ function sfs_cron_persist_albums() {
       //        $this->__update_post_meta($id, 'feed_picture', 'https://farm'.$photos['photoset']['photo'][0]['farm'].'.staticflickr.com/'.$photos['photoset']['photo'][0]['server'].'/'.$photos['photoset']['photo'][0]['id'].'_'.$photos['photoset']['photo'][0]['secret'].'_z.jpg');
       //        $this->__update_post_meta($id, 'feed_isVideo', false);
     }
+    $global['sfs-last-import-date'] = $timestamp;
+    update_option('sfs-global-options', $global);
   }
 }
 
@@ -369,9 +371,9 @@ function sfs_cron_persist_videos() {
     $data = json_decode(json_encode($post), true);
     $timestamp = date('Y-m-d H:i:s', strtotime($data['contentDetails']['videoPublishedAt']));
     if((strtotime($timestamp) > strtotime($last_import_date)) && ($data['snippet']['title'] != 'Private video')) {
-      $id = $this->create_feed_post([
+      $id = sfs_create_feed_post([
         'id' => $data['id'],
-        'post_type' => 'feed',
+        'post_type' => $global['sfs-post-type'],
         'post_title' => 'youtube-post-' . date('d-M-Y', strtotime($data['contentDetails']['videoPublishedAt'])),
         'post_content' => $data['snippet']['title'],
         'post_status' => 'publish',
@@ -382,6 +384,8 @@ function sfs_cron_persist_videos() {
       //        $this->__update_post_meta($id, 'feed_picture', $data['snippet']['thumbnails']['medium']['url']);
       //        $this->__update_post_meta($id, 'feed_isVideo', true);
     }
+    $global['sfs-last-import-date'] = $timestamp;
+    update_option('sfs-global-options', $global);
   }
 }
 
@@ -414,7 +418,7 @@ function sfs_cron_persist_feed_posts() {
   }
 }
 
-function sfs_cron_persist_twitter_feed_posts($data) {
+function sfs_cron_persist_twitter_feed_posts() {
   $posts = sfs_get_twitter_feed_posts();
   $data = $posts;
   $global = get_option('sfs-global-options');
@@ -423,9 +427,9 @@ function sfs_cron_persist_twitter_feed_posts($data) {
     $data = json_decode(json_encode($post), true);
     $date = date('Y-m-d H:i:s', strtotime($data['created_at']));
     if((strtotime($date) > strtotime($last_import_date)) && !(preg_match('/^RT/', $data['text']))) {
-      $id = $this->create_feed_post([
+      $id = sfs_create_feed_post([
         'id' => $data['id'],
-        'post_type' => $this->getPostType(),
+        'post_type' => $global['sfs-post-type'],
         'post_title' => 'twitter-post-' . date('d-M-Y', strtotime($data['created_at'])),
         'post_content' => $data['text'],
         'post_status' => 'publish',
@@ -437,6 +441,8 @@ function sfs_cron_persist_twitter_feed_posts($data) {
         //          $this->__update_post_meta($id, 'feed_picture', $data['entities']['media'][0]['media_url']);
       }
     }
+    $global['sfs-last-import-date'] = $date;
+    update_option('sfs-global-options', $global);
   }
 }
 
@@ -448,9 +454,9 @@ function sfs_cron_persist_social_events() {
   foreach ($data as $post) {
     $timestamp = date('Y-m-d H:i:s', strtotime($post['start_time']));
     if(strtotime($timestamp) > strtotime($last_import_date)) {
-      $id = $this->create_feed_post([
+      $id = sfs_create_feed_post([
         'id' => $post['id'],
-        'post_type' => $this->getPostType(),
+        'post_type' => $global['sfs-post-type'],
         'post_title' => $post['name'],
         'post_content' => $post['description'],
         'post_status' => 'publish',
@@ -460,6 +466,8 @@ function sfs_cron_persist_social_events() {
       //        $this->__update_post_meta($id, 'event_date', date('d-m-Y H:i:s', strtotime($post['start_time'])));
       //        $this->__update_post_meta($id, 'event_address', $post['place']['name']);
     }
+    $global['sfs-last-import-date'] = $timestamp;
+    update_option('sfs-global-options', $global);
   }
 }
 
