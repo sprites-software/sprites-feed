@@ -34,10 +34,12 @@ function sfs_admin_fb_options() {
 	// register a new setting for "sfs" page
 	register_setting( 'sfs-option-group', 'sfs-fb-credentials' );
 	// register a new section in the "sfs-feed-fb-settings" page
+//	add_settings_section('sfs-section-enable', __('Enable Settings', 'sfs-feed'), null, 'sfs-feed-fb-settings');
 	add_settings_section('sfs-section-fb-app', __( 'Facebook App settings', 'sfs-feed' ), 'sfs_render_settings_section', 'sfs-feed-fb-settings');
+	add_settings_field('sfs-enable-service', __('Enable Service', 'sfs-feed'), 'sfs_render_enable_setting', 'sfs-feed-fb-settings', 'sfs-section-fb-app', ['label_for' => 'sfs-enable-service', 'option' => 'sfs-fb-credentials']);
 	add_settings_field('sfs-fb-app-id', __( 'App ID', 'sfs-feed' ), 'sfs_render_fb_settings_field', 'sfs-feed-fb-settings', 'sfs-section-fb-app', ['label_for' => 'sfs-fb-app-id']);
 	add_settings_field('sfs-fb-app-secret', __( 'App Secret', 'sfs-feed' ), 'sfs_render_fb_settings_field', 'sfs-feed-fb-settings', 'sfs-section-fb-app', ['label_for' => 'sfs-fb-app-secret']);
-	add_settings_section('sfs-section-fb-config', __( 'Facebook API Config', 'sfs-feed' ), 'sfs_render_secondary_settings_section', 'sfs-feed-fb-settings');
+	add_settings_section('sfs-section-fb-config', __( 'Facebook API Configuration', 'sfs-feed' ), 'sfs_render_secondary_settings_section', 'sfs-feed-fb-settings');
 	add_settings_field('sfs-fb-user-id', __( 'Your Page/User ID', 'sfs-feed' ), 'sfs_render_fb_settings_field', 'sfs-feed-fb-settings', 'sfs-section-fb-config', ['label_for' => 'sfs-fb-user-id']);
 	add_settings_field('sfs-fb-user-fields', __( 'Fields', 'sfs-feed' ), 'sfs_render_fb_settings_fields', 'sfs-feed-fb-settings', 'sfs-section-fb-config', ['label_for' => 'sfs-fb-user-fields', 'fields' => $fields]);
 }
@@ -47,6 +49,7 @@ add_action('admin_init', 'sfs_admin_yt_options');
 function sfs_admin_yt_options() {
   register_setting( 'sfs-yt-option-group', 'sfs-yt-credentials' );
   add_settings_section('sfs-section-yt-app', __( 'Youtube API settings', 'sfs-feed' ), 'sfs_render_settings_section', 'sfs-feed-yt-settings');
+  add_settings_field('sfs-enable-service', __('Enable Service', 'sfs-feed'), 'sfs_render_enable_setting', 'sfs-feed-yt-settings', 'sfs-section-yt-app', ['label_for' => 'sfs-enable-service', 'option' => 'sfs-yt-credentials']);
   add_settings_field('sfs-yt-api-key', __( 'Api Key', 'sfs-feed' ), 'sfs_render_yt_settings_field', 'sfs-feed-yt-settings', 'sfs-section-yt-app', ['label_for' => 'sfs-yt-api-key']);
   add_settings_section('sfs-section-yt-config', __( 'Youtube API configuration', 'sfs-feed' ), 'sfs_render_secondary_settings_section', 'sfs-feed-yt-settings');
   add_settings_field('sfs-yt-playlist-id', __( 'Playlist ID', 'sfs-feed' ), 'sfs_render_yt_settings_field', 'sfs-feed-yt-settings', 'sfs-section-yt-config', ['label_for' => 'sfs-yt-playlist-id']);
@@ -64,6 +67,7 @@ function sfs_admin_flickr_options() {
 
 	register_setting( 'sfs-flickr-option-group', 'sfs-flickr-credentials' );
 	add_settings_section('sfs-section-flickr-app', __( 'Flickr App settings', 'sfs-feed' ), 'sfs_render_settings_section', 'sfs-feed-flickr-settings');
+	add_settings_field('sfs-enable-service', __('Enable Service', 'sfs-feed'), 'sfs_render_enable_setting', 'sfs-feed-flickr-settings', 'sfs-section-flickr-app', ['label_for' => 'sfs-enable-service', 'option' => 'sfs-flickr-credentials']);
 	add_settings_field('sfs-flickr-api-key', __( 'API Key', 'sfs-feed' ), 'sfs_render_flickr_settings_field', 'sfs-feed-flickr-settings', 'sfs-section-flickr-app', ['label_for' => 'sfs-flickr-api-key']);
 	add_settings_field('sfs-flickr-api-secret', __( 'API Secret', 'sfs-feed' ), 'sfs_render_flickr_settings_field', 'sfs-feed-flickr-settings', 'sfs-section-flickr-app', ['label_for' => 'sfs-flickr-api-secret']);
 	add_settings_section('sfs-section-flickr-config', __( 'API Configuration', 'sfs-feed' ), 'sfs_render_secondary_settings_section', 'sfs-feed-flickr-settings');
@@ -76,6 +80,7 @@ add_action('admin_init', 'sfs_admin_twitter_options');
 function sfs_admin_twitter_options() {
   register_setting( 'sfs-twitter-option-group', 'sfs-twitter-credentials' );
   add_settings_section('sfs-section-api-key', __( 'Twitter API Auth', 'sfs-feed' ), 'sfs_render_settings_section', 'sfs-feed-twitter-settings');
+  add_settings_field('sfs-enable-service', __('Enable Service', 'sfs-feed'), 'sfs_render_enable_setting', 'sfs-feed-twitter-settings', 'sfs-section-api-key', ['label_for' => 'sfs-enable-service', 'option' => 'sfs-twitter-credentials']);
   add_settings_field('sfs-api-oa-token', __( 'API OAuth Token', 'sfs-feed' ),'sfs_render_settings_field','sfs-feed-twitter-settings', 'sfs-section-api-key', ['label_for' => 'sfs-api-oa-token']);
   add_settings_field('sfs-api-oa-token-secret', __( 'API OAuth Token Secret', 'sfs-feed' ), 'sfs_render_settings_field', 'sfs-feed-twitter-settings', 'sfs-section-api-key', ['label_for' => 'sfs-api-oa-token-secret']);
   add_settings_field('sfs-api-oa-consumer-key', __( 'API Consumer Key', 'sfs-feed' ), 'sfs_render_settings_field', 'sfs-feed-twitter-settings', 'sfs-section-api-key', ['label_for' => 'sfs-api-oa-consumer-key']);
@@ -108,6 +113,24 @@ function sfs_render_post_setting($args) {
 		</select>
 	</div>
   <?php
+}
+function sfs_render_enable_setting($args) {
+	$options = get_option($args['option']);
+	$value = (isset($options[esc_attr($args['label_for'])])) ? $options[esc_attr($args['label_for'])] : false;
+	?>
+        <div class="form-group">
+	        <label for="sfs-fb-credentials[<?php echo esc_attr($args['label_for']) ?>]">
+		        <input
+				        type="checkbox"
+				        name="sfs-fb-credentials[<?php echo esc_attr($args['label_for']) ?>]"
+				        id="<?php echo esc_attr($args['label_for']) ?>"
+		                <?php if($value == 'on') :
+		                    echo 'checked';
+		                endif; ?>
+		        >
+	        </label>
+        </div>
+	<?php
 }
 function sfs_render_global_setting($args) {
   $options = get_option('sfs-global-options');

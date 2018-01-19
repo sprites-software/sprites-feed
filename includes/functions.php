@@ -10,11 +10,11 @@ use SFS\entity\YoutubeApi;
 use SFS\entity\SpritesSocialFeed;
 
 function sfs_plugin_path( $path = '' ) {
-  return path_join( WPCF7_PLUGIN_DIR, trim( $path, '/' ) );
+  return path_join( SFS_PLUGIN_DIR, trim( $path, '/' ) );
 }
 
 function sfs_plugin_url( $path = '' ) {
-  $url = plugins_url( $path, WPCF7_PLUGIN );
+  $url = plugins_url( $path, SFS_PLUGIN );
 
   if ( is_ssl() && 'http:' == substr( $url, 0, 5 ) ) {
     $url = 'https:' . substr( $url, 5 );
@@ -100,7 +100,7 @@ function sfs_flat_join( $input ) {
 }
 
 function sfs_support_html5() {
-  return (bool) apply_filters( 'wpcf7_support_html5', true );
+  return (bool) apply_filters( 'sfs_support_html5', true );
 }
 
 function sfs_support_html5_fallback() {
@@ -195,31 +195,33 @@ function sfs_register_post_types() {
 }
 
 function sfs_start_cron_jobs() {
-  add_action( 'sfs_cron_hook', 'sfs_cron_persist_feed_posts' );
-//  add_action( 'sfs_cron_hook_secondary', 'sfs_cron_persist_twitter_feed_posts' );
-//  add_action( 'sfs_cron_hook_events', 'sfs_cron_persist_social_events' );
-//  add_action( 'sfs_cron_hook_videos', 'sfs_cron_persist_videos' );
-//  add_action( 'sfs_cron_hook_albums', 'sfs_cron_persist_albums' );
-//  add_action( 'sfs_cron_hook_people', 'sfs_cron_persist_people_videos' );
+  $option_fb = get_option('sfs-fb-credentials');
+  $option_yt = get_option('sfs-yt-credentials');
+  $option_flickr = get_option('sfs-flickr-credentials');
+  $option_twitter = get_option('sfs-twitter-credentials');
 
-  if ( ! wp_next_scheduled( 'sfs_cron_hook' ) ) {
-    wp_schedule_event( time(), 'hourly', 'sfs_cron_hook');
+  add_action( 'sfs_cron_hook', 'sfs_cron_persist_feed_posts' );
+  add_action( 'sfs_cron_hook_secondary', 'sfs_cron_persist_twitter_feed_posts' );
+  add_action( 'sfs_cron_hook_events', 'sfs_cron_persist_social_events' );
+  add_action( 'sfs_cron_hook_videos', 'sfs_cron_persist_videos' );
+  add_action( 'sfs_cron_hook_albums', 'sfs_cron_persist_albums' );
+
+  if ( ! wp_next_scheduled( 'sfs_cron_hook' ) && (isset($option_fb['sfs-enable-service'])) ) {
+    if(isset($option_fb['sfs-fb-user-fields']) && ($option_fb['sfs-fb-user-fields'] == 'posts')) {
+      wp_schedule_event(time(), 'hourly', 'sfs_cron_hook');
+    } else if(isset($option_fb['sfs-fb-user-fields']) && ($option_fb['sfs-fb-user-fields'] == 'events')) {
+      wp_schedule_event(time(), 'hourly', 'sfs_cron_hook_events');
+    }
   }
-//  if ( ! wp_next_scheduled( 'sfs_cron_hook_secondary' ) ) {
-//    wp_schedule_event( time(), 'hourly', 'sfs_cron_hook_secondary' );
-//  }
-//  if ( ! wp_next_scheduled( 'sfs_cron_hook_events' ) ) {
-//    wp_schedule_event( time(), 'hourly', 'sfs_cron_hook_events' );
-//  }
-//  if ( ! wp_next_scheduled( 'sfs_cron_hook_videos' ) ) {
-//    wp_schedule_event( time(), 'hourly', 'sfs_cron_hook_videos' );
-//  }
-//  if ( ! wp_next_scheduled( 'sfs_cron_hook_albums' ) ) {
-//    wp_schedule_event( time(), 'hourly', 'sfs_cron_hook_albums' );
-//  }
-//  if ( ! wp_next_scheduled( 'sfs_cron_hook_people' ) ) {
-//    wp_schedule_event( time(), 'hourly', 'sfs_cron_hook_people' );
-//  }
+  if ( ! wp_next_scheduled( 'sfs_cron_hook_secondary' ) && (isset($option_twitter['sfs-enable-service'])) ) {
+    wp_schedule_event( time(), 'hourly', 'sfs_cron_hook_secondary' );
+  }
+  if ( ! wp_next_scheduled( 'sfs_cron_hook_videos' ) && (isset($option_yt['sfs-enable-service'])) ) {
+    wp_schedule_event( time(), 'hourly', 'sfs_cron_hook_videos' );
+  }
+  if ( ! wp_next_scheduled( 'sfs_cron_hook_albums' ) && (isset($option_flickr['sfs-enable-service'])) ) {
+    wp_schedule_event( time(), 'hourly', 'sfs_cron_hook_albums' );
+  }
 }
 
 function sfs_get_facebook_feed_posts() {
@@ -240,28 +242,36 @@ function sfs_get_facebook_feed_posts() {
   $api->setAccessToken($api->getFbApp()->getAccessToken());
   $api->sendRequest();
 
-  return $api->getPublicPosts();
+  return (isset($option['sfs-enable-service'])) ? $api->getPublicPosts() : [];
 }
 
 function sfs_get_facebook_events() {
   $option = get_option('sfs-fb-credentials');
   $app_id = $option['sfs-fb-app-id'];
   $app_secret = $option['sfs-fb-app-secret'];
+  $page = $option['sfs-fb-user-id'];
+
   $fb = new Facebook([
     'app_id' => $app_id,
     'app_secret' => $app_secret,
     'default_graph_version' => 'v2.3',
   ]);
   $api = new FacebookApi();
+  $api->setPage($page);
   $api->setFb($fb);
   $api->setFbApp($fb->getApp());
   $api->setAccessToken($api->getFbApp()->getAccessToken());
   $api->sendEventRequest();
 
-  return $api->getPublicEvents();
+  return (isset($option['sfs-enable-service'])) ? $api->getPublicEvents() : [];
 }
 
-function sfs_get_youtube_videos($api_key, $playlist_id, $max) {
+function sfs_get_youtube_videos() {
+  $option = get_option('sfs-yt-credentials');
+  $api_key = $option['sfs-yt-api-key'];
+  $playlist_id = $option['sfs-yt-playlist-id'];
+  $max = $option['sfs-yt-max'];
+
   $yt = new YoutubeApi();
   $yt->setClient(new \Google_Client());
   $yt->setApiKey($api_key);
@@ -270,10 +280,14 @@ function sfs_get_youtube_videos($api_key, $playlist_id, $max) {
   $videos = $yt->sendRequest($yt->getService(), 'snippet,contentDetails', ['playlistId' => $playlist_id, 'maxResults' => $max]);
   $yt->setVideos($videos);
 
-  return $yt->getVideos();
+  return (isset($option['sfs-enable-service'])) ? $yt->getVideos() : [];
 }
 
-function sfs_get_flickr_photosets($api_key, $user_id) {
+function sfs_get_flickr_photosets() {
+  $option = get_option('sfs-flickr-credentials');
+  $api_key = $option['sfs-flickr-api-key'];
+  $user_id = $option['sfs-flickr-user'];
+
   $flickr = new FlickrApi();
   $flickr->setEncodedParams([
     'api_key' => $api_key,
@@ -282,10 +296,15 @@ function sfs_get_flickr_photosets($api_key, $user_id) {
     'format' => 'php_serial'
   ]);
   $flickr->sendRequest();
-  return $flickr->getResponse();
+
+  return (isset($option['sfs-enable-service'])) ? $flickr->getResponse() : [];
 }
 
-function sfs_get_flickr_photos($api_key, $id, $user_id) {
+function sfs_get_flickr_photos($id) {
+  $option = get_option('sfs-flickr-credentials');
+  $api_key = $option['sfs-flickr-api-key'];
+  $user_id = $option['sfs-flickr-user'];
+
   $flickr = new FlickrApi();
   $flickr->setEncodedParams([
     'api_key' => $api_key,
@@ -295,22 +314,25 @@ function sfs_get_flickr_photos($api_key, $id, $user_id) {
     'format' => 'php_serial'
   ]);
   $flickr->sendRequest();
-  return $flickr->getResponse();
+
+  return (isset($option['sfs-enable-service'])) ? $flickr->getResponse() : [];
 }
 
-function sfs_get_twitter_feed_posts($oa_token, $token_secret, $consumer_key, $consumer_secret, $screen_name) {
+function sfs_get_twitter_feed_posts() {
+  $option = get_option('sfs-twitter-credentials');
+
   $twitter = new TwitterApi();
   $twitter->setApi(new TwitterAPIExchange([
-    'oauth_access_token' => $oa_token,
-    'oauth_access_token_secret' => $token_secret,
-    'consumer_key' => $consumer_key,
-    'consumer_secret' => $consumer_secret
+    'oauth_access_token' => $option['sfs-api-oa-token'],
+    'oauth_access_token_secret' => $option['sfs-api-oa-token-secret'],
+    'consumer_key' => $option['sfs-api-consumer-key'],
+    'consumer_secret' => $option['sfs-api-consumer-key-secret']
   ]));
   $twitter->setUrl('https://api.twitter.com/1.1/statuses/user_timeline.json');
-  $twitter->setField('?screen_name='.$screen_name);
+  $twitter->setField('?screen_name='.$option['sfs-api-screen-name']);
   $twitter->sendGetRequest();
 
-  return $twitter->getTweets();
+  return (isset($option['sfs-enable-service'])) ? $twitter->getTweets() : [];
 }
 
 function sfs_cron_persist_albums($data) {

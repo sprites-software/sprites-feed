@@ -5,7 +5,8 @@
 		margin-right: 1rem;
 		box-sizing: border-box;
 	}
-	.Activation .Activation-wrap {
+	.Activation .Activation-wrap,
+	.Global {
 		padding: 2rem;
 		background: #fff;
 		border: 1px solid #efefef;
@@ -54,9 +55,9 @@
 			<div class="Navigation-wrap">
 				<a class="Navigation-item" href="<?php menu_page_url( 'sfs-feed-fb-settings', true ); ?>"><span class="dashicons dashicons-facebook"></span><span class="Type Type--Default"><?php _e('Facebook settings'); ?></span></a>
 				<a class="Navigation-item" href="<?php menu_page_url( 'sfs-feed-twitter-settings', true ); ?>"><span class="dashicons dashicons-twitter"></span><span class="Type Type--Default"><?php _e('Twitter settings'); ?></span></a>
-				<a class="Navigation-item" href="<?php menu_page_url( 'sfs-feed-flickr-settings', true ); ?>"><span class=""></span><span class="Type Type--Default"><?php _e('Flickr settings'); ?></span></a>
-				<a class="Navigation-item" href="<?php menu_page_url( 'sfs-feed-insta-settings', true ); ?>"><span class=""></span><span class="Type Type--Default"><?php _e('Instagram settings'); ?></span></a>
-				<a class="Navigation-item" href="<?php menu_page_url( 'sfs-feed-yt-settings', true ); ?>"><span class=""></span><span class="Type Type--Default"><?php _e('YouTube settings'); ?></span></a>
+				<a class="Navigation-item" href="<?php menu_page_url( 'sfs-feed-flickr-settings', true ); ?>"><span class="dashicons dashicons-images-alt2"></span><span class="Type Type--Default"><?php _e('Flickr settings'); ?></span></a>
+				<a class="Navigation-item" href="<?php menu_page_url( 'sfs-feed-insta-settings', true ); ?>"><span class="dashicons dashicons-camera"></span><span class="Type Type--Default"><?php _e('Instagram settings'); ?></span></a>
+				<a class="Navigation-item" href="<?php menu_page_url( 'sfs-feed-yt-settings', true ); ?>"><span class="dashicons dashicons-video-alt3"></span><span class="Type Type--Default"><?php _e('YouTube settings'); ?></span></a>
 			</div>
 		</div>
 	</div>
@@ -65,12 +66,15 @@
   <?php settings_errors( 'sfs_messages' ); ?>
   <?php do_action( 'sfs_admin_warnings' ); ?>
   <?php do_action( 'sfs_admin_notices' ); ?>
-
-	<form action="options.php" method="post">
-      <?php
-      settings_fields( 'sfs-global' );
-      do_settings_sections( 'sfs-feed' );
-      submit_button( 'Save Settings' );
-      ?>
-	</form>
+	<div class="Global">
+		<div class="Global-wrap">
+			<form action="options.php" method="post">
+		      <?php
+		      settings_fields( 'sfs-global' );
+		      do_settings_sections( 'sfs-feed' );
+		      submit_button( 'Save Settings' );
+		      ?>
+			</form>
+		</div>
+	</div>
 </div>
