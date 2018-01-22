@@ -32,7 +32,7 @@
 <div class="Plugin">
 	<div class="Plugin-wrap">
 		<h1 class="Type Type--Headline">
-			<?php echo esc_html( __( 'Social Feed by SPRITES', 'sfs-feed' ) ); ?>
+			<?php echo esc_html( __( 'Sprites Feed', 'sprites-feed' ) ); ?>
 		</h1>
 
 		<hr class="wp-header-end">

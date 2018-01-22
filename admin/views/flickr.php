@@ -3,7 +3,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
   return;
 }
 if ( isset( $_GET['settings-updated'] ) ) {
-  add_settings_error( 'sfs_messages', 'sfs_message', __( 'Settings Saved', 'sfs-feed' ), 'updated' );
+  add_settings_error( 'sfs_messages', 'sfs_message', __( 'Settings Saved', 'sprites-feed' ), 'updated' );
 }
 ?>
 <style>

@@ -17,7 +17,7 @@ if ( is_admin() ) {
 class SFS {
 
   public static function load_modules() {
-//    self::load_module( 'module' );
+    self::load_module( 'import' );
   }
 
   protected static function load_module( $mod ) {
@@ -69,6 +69,7 @@ function sfs_init() {
   sfs_get_request_uri();
   sfs_register_post_types();
   sfs_start_cron_jobs();
+
   do_action( 'sfs_init' );
 }
 

@@ -6,8 +6,6 @@ class SpritesSocialFeed {
 
   const post_type = 'sfs_social_feed';
 
-  private $key;
-
   public static function register_post_type() {
     register_post_type( self::post_type, array(
       'labels' => array(
@@ -19,5 +17,4 @@ class SpritesSocialFeed {
       'menu_icon' => 'dashicons-admin-site'
     ) );
   }
-
 }

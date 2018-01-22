@@ -4,7 +4,7 @@
 	}
 	if ( isset( $_GET['settings-updated'] ) ) {
 	  // add settings saved message with the class of "updated"
-	  add_settings_error( 'sfs_messages', 'sfs_message', __( 'Settings Saved', 'sfs-feed' ), 'updated' );
+	  add_settings_error( 'sfs_messages', 'sfs_message', __( 'Settings Saved', 'sprites-feed' ), 'updated' );
 	}
 ?>
 <style>
