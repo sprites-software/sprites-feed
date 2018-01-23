@@ -16,7 +16,7 @@ yarn watch
 ```
 
 ## Changelog
-- [v0.2.2](#) - Add Import button for facebook service
+- [v0.2.2](#) - Add Import button for API services
 - [v0.2.1](#) - Add Enablers, cron events and other API actions
 - [v0.2](#) - Facebook API connect (v2.1), Post type settings, general fixes
 - [v0.1.2](#) - Add admin settings and admin views

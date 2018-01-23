@@ -19,7 +19,7 @@ function sfs_global_options() {
 	]);
 	register_setting('sfs-global', 'sfs-global-options');
 	add_settings_section('sfs-global-settings', __('Global Settings', 'sprites-feed'), null, 'sfs-feed');
-	add_settings_field('sfs-last-import-date', __('Last import date', 'sprites-feed'), 'sfs_render_global_setting', 'sfs-feed', 'sfs-global-settings', ['label_for' => 'sfs-last-import-date', 'default_value' => '0']);
+//	add_settings_field('sfs-last-import-date', __('Last import date', 'sprites-feed'), 'sfs_render_global_setting', 'sfs-feed', 'sfs-global-settings', ['label_for' => 'sfs-last-import-date', 'default_value' => '0', 'option' => 'sfs-global-options']);
 	add_settings_field('sfs-post-type', __('Add to post type', 'sprites-feed'), 'sfs_render_post_setting', 'sfs-feed', 'sfs-global-settings', ['label_for' => 'sfs-post-type', 'post_types' => $post_types]);
 }
 
@@ -41,6 +41,7 @@ function sfs_admin_fb_options() {
 	add_settings_section('sfs-section-fb-config', __( 'Facebook API Configuration', 'sprites-feed' ), 'sfs_render_secondary_settings_section', 'sfs-feed-fb-settings');
 	add_settings_field('sfs-fb-user-id', __( 'Your Page/User ID', 'sprites-feed' ), 'sfs_render_fb_settings_field', 'sfs-feed-fb-settings', 'sfs-section-fb-config', ['label_for' => 'sfs-fb-user-id']);
 	add_settings_field('sfs-fb-user-fields', __( 'Fields', 'sprites-feed' ), 'sfs_render_fb_settings_fields', 'sfs-feed-fb-settings', 'sfs-section-fb-config', ['label_for' => 'sfs-fb-user-fields', 'fields' => $fields]);
+	add_settings_field('sfs-last-import', __('Last Import', 'sprites-feed'), 'sfs_render_timestamp_settings', 'sfs-feed-fb-settings', 'sfs-section-fb-config', ['label_for' => 'sfs-last-import', 'option' => 'sfs-fb-credentials']);
 }
 
 add_action('admin_init', 'sfs_admin_yt_options');
@@ -53,6 +54,7 @@ function sfs_admin_yt_options() {
   add_settings_section('sfs-section-yt-config', __( 'Youtube API configuration', 'sprites-feed' ), 'sfs_render_secondary_settings_section', 'sfs-feed-yt-settings');
   add_settings_field('sfs-yt-playlist-id', __( 'Playlist ID', 'sprites-feed' ), 'sfs_render_yt_settings_field', 'sfs-feed-yt-settings', 'sfs-section-yt-config', ['label_for' => 'sfs-yt-playlist-id']);
   add_settings_field('sfs-yt-max', __( 'Max results', 'sprites-feed' ), 'sfs_render_yt_settings_number', 'sfs-feed-yt-settings', 'sfs-section-yt-config', ['label_for' => 'sfs-yt-max']);
+  add_settings_field('sfs-last-import', __('Last Import', 'sprites-feed'), 'sfs_render_timestamp_settings', 'sfs-feed-yt-settings', 'sfs-section-yt-config', ['label_for' => 'sfs-last-import', 'option' => 'sfs-yt-credentials']);
 }
 
 add_action('admin_init', 'sfs_admin_flickr_options');
@@ -72,6 +74,7 @@ function sfs_admin_flickr_options() {
 	add_settings_section('sfs-section-flickr-config', __( 'API Configuration', 'sprites-feed' ), 'sfs_render_secondary_settings_section', 'sfs-feed-flickr-settings');
 	add_settings_field('sfs-flickr-user', __( 'User ID', 'sprites-feed' ), 'sfs_render_flickr_settings_field', 'sfs-feed-flickr-settings', 'sfs-section-flickr-config', ['label_for' => 'sfs-flickr-user']);
 	add_settings_field('sfs-flickr-api-method', __( 'API Method', 'sprites-feed' ), 'sfs_render_flickr_method_field', 'sfs-feed-flickr-settings', 'sfs-section-flickr-config', ['label_for' => 'sfs-flickr-api-method', 'methods' => $methods]);
+	add_settings_field('sfs-last-import', __('Last Import', 'sprites-feed'), 'sfs_render_timestamp_settings', 'sfs-feed-flickr-settings', 'sfs-section-flickr-config', ['label_for' => 'sfs-last-import', 'option' => 'sfs-flickr-credentials']);
 }
 
 add_action('admin_init', 'sfs_admin_twitter_options');
@@ -86,6 +89,7 @@ function sfs_admin_twitter_options() {
   add_settings_field('sfs-api-oa-consumer-key-secret', __( 'API Consumer Key Secret', 'sprites-feed' ), 'sfs_render_settings_field', 'sfs-feed-twitter-settings', 'sfs-section-api-key', ['label_for' => 'sfs-api-oa-consumer-key-secret']);
   add_settings_section('sfs-section-api-config', __( 'Twitter API Configuration', 'sprites-feed' ), 'sfs_render_secondary_settings_section', 'sfs-feed-twitter-settings');
   add_settings_field('sfs-api-screen-name', __( 'Twitter screen name', 'sprites-feed' ),'sfs_render_settings_field','sfs-feed-twitter-settings', 'sfs-section-api-config', ['label_for' => 'sfs-api-screen-name']);
+  add_settings_field('sfs-last-import', __('Last Import', 'sprites-feed'), 'sfs_render_timestamp_settings', 'sfs-feed-twitter-settings', 'sfs-section-api-config', ['label_for' => 'sfs-last-import', 'option' => 'sfs-twitter-credentials']);
 }
 
 function sfs_render_settings_section( $args ) {
@@ -141,6 +145,19 @@ function sfs_render_global_setting($args) {
 	           name="sfs-global-options[<?php echo esc_attr($args['label_for']); ?>]"
 	           value="<?php echo $value; ?>"
 	    >
+    </div>
+  <?php
+}
+function sfs_render_timestamp_settings($args) {
+	$options = get_option($args['option']);
+	$value = (isset($options[esc_attr($args['label_for'])])) ? $options[esc_attr($args['label_for'])] : 0;
+    ?>
+
+    <div class="form-group">
+	    <input type="text"
+	           id="<?php echo esc_attr($args['lavel_for']) ?>"
+	           name="<?php echo esc_attr($args['option']); ?>[<?php echo esc_attr($args['label_for']) ?>]"
+	           value="<?php echo $value; ?>">
     </div>
   <?php
 }
