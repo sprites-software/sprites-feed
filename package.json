@@ -5,7 +5,7 @@
   "main": "index.js",
   "repository": "git@bitbucket.org:sprites/sfs-feed.git",
   "author": "Pavel Karfík <pavel.karfik@sprites.co>",
-  "license": "MIT",
+  "license": "GPL2",
   "dependencies": {
     "autoprefixer": "^7.1.5",
     "babel-core": "^6.26.0",
