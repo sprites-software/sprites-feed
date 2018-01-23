@@ -1,34 +1,3 @@
-<style>
-	.Plugin {
-		padding-top: 1rem;
-		position: relative;
-		margin-right: 1rem;
-		box-sizing: border-box;
-	}
-	.Activation .Activation-wrap,
-	.Global {
-		padding: 2rem;
-		background: #fff;
-		border: 1px solid #efefef;
-	}
-	.Input.Input--Default {
-		padding: 0.33rem;
-	}
-	.Navigation .Navigation-item {
-		display: block;
-		padding: 1rem 2rem;
-		background: #fff;
-		border: 1px solid #efefef;
-		color: #000;
-		text-decoration: none;
-	}
-	.Navigation .Navigation-item:hover {
-		background: #fafafa;
-	}
-	.Navigation .Navigation-item > .dashicons {
-		margin-right : 1rem;
-	}
-</style>
 <div class="Plugin">
 	<div class="Plugin-wrap">
 		<h1 class="Type Type--Headline">
@@ -46,7 +15,7 @@
 				<h2 class="Type Type--Headline"><?php _e('Activate your license'); ?></h2>
 				<form class="Form Form--inline">
 					<input type="text" class="Input Input--Default" placeholder="<?php _e('Insert your license key'); ?>">
-					<input type="submit" class="Button Button--Default" value="<?php _e('Activate'); ?>">
+          <?php submit_button('Activate', 'primary', 'licence-activation', false); ?>
 				</form>
 			</div>
 		</div>
