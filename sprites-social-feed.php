@@ -1,17 +1,17 @@
 <?php
 /**
-  Plugin Name:  Social Feed by SPRITES
-  Plugin URI:   https://sprites.co/sprites-social-feed
+  Plugin Name:  SpritesFeed
+  Plugin URI:   https://sprites.co/sprites-feed
   Description:  Easy to use wordpress plugin that helps to connect your site with your social networks into a single filterable mixed feed, configure your credentials to get started.
-  Version:      0.1.1
+  Version:      0.2.1
   Author:       SPRITES SOFTWARE, s.r.o.
   Author URI:   https://sprites.co/
   License:      GPL2
   License URI:  https://www.gnu.org/licenses/gpl-2.0.html
-  Text Domain:  sfs-feed
+  Text Domain:  sprites-feed
 */
 
-define( 'SFS_PLUGIN_VERSION', '0.2.1' );
+define( 'SFS_PLUGIN_VERSION', '0.2.2' );
 
 define( 'SFS_REQUIRED_WP_VERSION', '4.7' );
 

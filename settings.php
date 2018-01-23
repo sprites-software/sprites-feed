@@ -17,7 +17,7 @@ if ( is_admin() ) {
 class SFS {
 
   public static function load_modules() {
-//    self::load_module( 'module' );
+    self::load_module( 'import' );
   }
 
   protected static function load_module( $mod ) {
@@ -60,6 +60,7 @@ add_action( 'plugins_loaded', 'sfs' );
 
 function sfs() {
   sfs_load_textdomain();
+  sfs_start_cron_jobs();
   SFS::load_modules();
 }
 
@@ -68,7 +69,8 @@ add_action( 'init', 'sfs_init' );
 function sfs_init() {
   sfs_get_request_uri();
   sfs_register_post_types();
-  sfs_start_cron_jobs();
+
+//  var_dump(sfs_cron_persist_albums());
   do_action( 'sfs_init' );
 }
 

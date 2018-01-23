@@ -3,7 +3,7 @@ if ( ! current_user_can( 'manage_options' ) ) {
   return;
 }
 if ( isset( $_GET['settings-updated'] ) ) {
-  add_settings_error( 'sfs_messages', 'sfs_message', __( 'Settings Saved', 'sfs-feed' ), 'updated' );
+  add_settings_error( 'sfs_messages', 'sfs_message', __( 'Settings Saved', 'sprites-feed' ), 'updated' );
 }
 ?>
 <style>
@@ -27,6 +27,8 @@ if ( isset( $_GET['settings-updated'] ) ) {
 		      submit_button( 'Save Settings' );
 		      ?>
 			</form>
+			<button id="import-posts-btn" class="button button-secondary" type="button" data-case="sfs_run_import_facebook">Import now</button>
 		</div>
 	</div>
 </div>
+</script>
