@@ -23,11 +23,12 @@
 		    <h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
 			<form action="options.php" method="post">
-		      <?php
-		      settings_fields( 'sfs-twitter-option-group' );
-		      do_settings_sections( 'sfs-feed-twitter-settings' );
-		      submit_button( 'Save Settings' );
-		      ?>
+				<?php
+					settings_fields( 'sfs-twitter-option-group' );
+					do_settings_sections( 'sfs-feed-twitter-settings' );
+					submit_button( 'Save Settings' );
+				?>
+				<button id="import-posts-btn" class="button button-secondary" type="button" data-case="sfs_run_import_twitter">Import now</button>
 			</form>
 		</div>
 	</div>

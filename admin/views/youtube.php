@@ -29,6 +29,7 @@ if ( isset( $_GET['settings-updated'] ) ) {
 		      do_settings_sections( 'sfs-feed-yt-settings' );
 		      submit_button( 'Save Settings' );
 		      ?>
+				<button id="import-posts-btn" class="button button-secondary" type="button" data-case="sfs_run_import_youtube">Import now</button>
 			</form>
 		</div>
 	</div>
