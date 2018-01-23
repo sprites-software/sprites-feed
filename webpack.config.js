@@ -6,30 +6,29 @@ const path = require('path'),
       WebpackBuildNotifierPlugin = require('webpack-build-notifier'),
       isProd = (process.env.NODE_ENV === 'production'),
       getPlugins = (isProd) => {
-        let plugins = [];
+        let plugins = []
 
         // Expose NODE_ENV
         plugins.push(new webpack.DefinePlugin({
           'process.env': {
             'NODE_ENV': process.env.NODE_ENV
           }
-        }));
+        }))
 
         // Add plugins for production
         if (isProd) {
-          plugins.push(new webpack.optimize.UglifyJsPlugin());
-          plugins.push(new OptimizeCssAssetsPlugin());
-          plugins.push(new MinifyPlugin());
-          plugins.push(new ExtractTextPlugin('[name].styles.css'));
+          plugins.push(new webpack.optimize.UglifyJsPlugin())
+          plugins.push(new OptimizeCssAssetsPlugin())
+          plugins.push(new MinifyPlugin())
         }
-
         // Add plugins for dev
         else {
-
           plugins.push(new WebpackBuildNotifierPlugin())
         }
 
-        return plugins;
+        plugins.push(new ExtractTextPlugin('[name].styles.css'))
+
+        return plugins
       },
       getLoaders = (isProd) => {
         let rules = []
@@ -64,42 +63,28 @@ const path = require('path'),
           }
         })
 
-        if(isProd){
-          // Extract CSS in prod
-          rules.push({
-            test: /\.scss$/,
-            use: ExtractTextPlugin.extract({
-              fallbackLoader: 'style-loader',
-              use: [
-                'css-loader', 'postcss-loader', 'sass-loader'
-              ]
-            })
+
+        // Extract CSS in prod
+        rules.push({
+          test: /\.scss$/,
+          use: ExtractTextPlugin.extract({
+            fallbackLoader: 'style-loader',
+            use: [
+              'css-loader', 'postcss-loader', 'sass-loader'
+            ]
           })
-        } else {
-          rules.push({
-            test: /\.scss$/,
-            // Use CSS in JS for dev
-            use: [{
-              loader: 'style-loader', // inject CSS to page
-            }, {
-              loader: 'css-loader', // translates CSS into CommonJS modules
-            }, {
-              loader: 'postcss-loader', // Run post css actions
-            }, {
-              loader: 'sass-loader' // compiles SASS to CSS
-            }]
-          })
-        }
+        })
+
         return rules
       }
 
 console.log('\n\n\n\nTHIS IS A SPRITES SOFTWARE APPLICATION')
 if(isProd){
-  console.log('\nRunning in Production mode');
+  console.log('\nRunning in Production mode')
 } else {
-  console.log('\nRunning in Development mode');
+  console.log('\nRunning in Development mode')
 }
-console.log('\n\n');
+console.log('\n\n')
 
 module.exports = {
   entry: {
@@ -114,4 +99,4 @@ module.exports = {
     rules: getLoaders(isProd)
   },
   plugins: getPlugins(isProd)
-};
+}
