@@ -1,0 +1,36 @@
+{
+  "name": "sfs-feed",
+  "version": "0.2.2",
+  "description": "",
+  "main": "index.js",
+  "repository": "git@bitbucket.org:sprites/sfs-feed.git",
+  "author": "Pavel Karfík <pavel.karfik@sprites.co>",
+  "license": "MIT",
+  "dependencies": {
+    "autoprefixer": "^7.1.5",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-minify-webpack-plugin": "^0.2.0",
+    "babel-preset-env": "^1.6.0",
+    "const": "^1.0.0",
+    "css-loader": "^0.28.7",
+    "extract-text-webpack-plugin": "2.1.2",
+    "file-loader": "^1.1.5",
+    "node-sass": "^4.5.3",
+    "optimize-css-assets-webpack-plugin": "^3.2.0",
+    "postcss-loader": "^2.0.8",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.19.0",
+    "svg-url-loader": "^2.3.0",
+    "webpack": "^3.7.1",
+    "webpack-build-notifier": "^0.1.16"
+  },
+  "browserslist": [
+    "last 4 versions"
+  ],
+  "scripts": {
+    "dist": "NODE_ENV=production webpack",
+    "start": "webpack",
+    "watch": "webpack --watch"
+  }
+}
