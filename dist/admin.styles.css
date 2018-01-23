@@ -1,0 +1,29 @@
+.Activation .Activation-wrap {
+  padding: 2rem;
+  background: #fff;
+  border: 1px solid #efefef; }
+.Global {
+  padding: 2rem;
+  background: #fff;
+  border: 1px solid #efefef; }
+.Input.Input--Default {
+  padding: 0.33rem; }
+.Navigation .Navigation-item {
+  display: block;
+  padding: 1rem 2rem;
+  background: #fff;
+  border: 1px solid #efefef;
+  color: #000;
+  text-decoration: none; }
+
+.Navigation .Navigation-item:hover {
+  background: #fafafa; }
+
+.Navigation .Navigation-item > .dashicons {
+  margin-right: 1rem; }
+.Plugin {
+  padding-top: 1rem;
+  position: relative;
+  margin-right: 1rem;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box; }
