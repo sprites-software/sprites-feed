@@ -105,3 +105,16 @@ function sfs_install() {
     return;
   }
 }
+
+/* Enqueue scripts and styles */
+
+add_action('admin_enqueue_scripts', 'sfs_enqueue_bundles');
+
+function sfs_enqueue_bundles( $hook ){
+  // if ( $hook != 'toplevel_page_'.SFS_PLUGIN_NAME) {
+  //   return;
+  // }
+  wp_enqueue_style('sfs_admin_stylesheet', plugins_url('/dist/admin.styles.css', __FILE__));
+  wp_enqueue_script('sfs_admin_scripts', plugins_url('/dist/admin.bundle.js', __FILE__), array(), 1, false);
+}
+// http://localhost:8888/wordpress-api/Users/krystof/Sites/wordpress-api/wp-content/plugins/sfs-feed/dist/admin.styles.css?ver=4.8.5
