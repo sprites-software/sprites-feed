@@ -109,7 +109,6 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].bundle.js',
-    //publicPath: isProd ? './' : './wp-content/themes/mireprezident/dist/'
   },
   module: {
     rules: getLoaders(isProd)
