@@ -2,6 +2,12 @@
   padding: 2rem;
   background: #fff;
   border: 1px solid #efefef; }
+.toplevel_page_sfs-feed .wp-menu-image {
+  background: url("data:image/svg+xml,%3Csvg id='80f6166e-0ef7-4e73-9171-0f0784c5d879' data-name='Layer 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50.17 73.5'%3E%3Ctitle%3Esprites logo%3C/title%3E%3Cpolygon points='50 20 50 0 0 18.67 0 38.67 50 20' style='fill:%2300aeef;opacity:0.9'/%3E%3Cpolygon points='50.17 54.83 50.17 34.83 0.17 53.5 0.17 73.5 50.17 54.83' style='fill:%2300aeef;opacity:0.9'/%3E%3Cpolygon points='0 18.67 50.17 34.83 50.17 54.83 0 38.67 0 18.67' style='fill:%230072bc;opacity:0.9'/%3E%3C/svg%3E") no-repeat center/1em; }
+
+.wp-menu-open.toplevel_page_sfs-feed .wp-menu-image {
+  -webkit-filter: grayscale(100%) brightness(140%);
+          filter: grayscale(100%) brightness(140%); }
 .Global {
   padding: 2rem;
   background: #fff;
@@ -27,9 +33,6 @@
   margin-right: 1rem;
   -webkit-box-sizing: border-box;
           box-sizing: border-box; }
-.toplevel_page_sfs-feed .wp-menu-image {
-  background: url("data:image/svg+xml,%3Csvg id='80f6166e-0ef7-4e73-9171-0f0784c5d879' data-name='Layer 1' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50.17 73.5'%3E%3Ctitle%3Esprites logo%3C/title%3E%3Cpolygon points='50 20 50 0 0 18.67 0 38.67 50 20' style='fill:%2300aeef;opacity:0.9'/%3E%3Cpolygon points='50.17 54.83 50.17 34.83 0.17 53.5 0.17 73.5 50.17 54.83' style='fill:%2300aeef;opacity:0.9'/%3E%3Cpolygon points='0 18.67 50.17 34.83 50.17 54.83 0 38.67 0 18.67' style='fill:%230072bc;opacity:0.9'/%3E%3C/svg%3E") no-repeat center/1em; }
-
-.wp-menu-open.toplevel_page_sfs-feed .wp-menu-image {
-  -webkit-filter: grayscale(100%) brightness(140%);
-          filter: grayscale(100%) brightness(140%); }
+.Global.apiDisabled [id|=sfs-fb], .Global.apiDisabled [id|=sfs-api], .Global.apiDisabled [id|=sfs-yt], .Global.apiDisabled #sfs-last-import, .Global.apiDisabled #import-posts-btn {
+  opacity: .5;
+  pointer-events: none; }

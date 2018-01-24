@@ -72,6 +72,9 @@
 
 var importAll = function importAll(r) {
   return r.keys().forEach(r);
+},
+    ready = function ready(fn) {
+  return document.readyState != 'loading' ? fn() : document.addEventListener('DOMContentLoaded', fn);
 };
 
 if (!NodeList.prototype.forEach) {
@@ -79,6 +82,10 @@ if (!NodeList.prototype.forEach) {
 }
 
 importAll(__webpack_require__(1));
+
+ready(function () {
+  __webpack_require__(8);
+});
 
 /***/ }),
 /* 1 */
@@ -90,7 +97,8 @@ var map = {
 	"./global.scss": 4,
 	"./input.scss": 5,
 	"./navigation.scss": 6,
-	"./plugin.scss": 7
+	"./plugin.scss": 7,
+	"./service.scss": 21
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -140,6 +148,48 @@ webpackContext.id = 1;
 
 /***/ }),
 /* 7 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var checkbox = document.getElementById('sfs-enable-service'),
+    global = document.querySelector('.Global'),
+    disable = function disable() {
+  global.classList.add('apiDisabled');
+},
+    enable = function enable() {
+  global.classList.remove('apiDisabled');
+};
+
+if (!!checkbox && !!global) {
+  if (!checkbox.checked) disable();
+
+  checkbox.addEventListener('change', function () {
+    if (!checkbox.checked) disable();else enable();
+  });
+}
+
+/***/ }),
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */,
+/* 21 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
