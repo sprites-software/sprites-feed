@@ -106,3 +106,12 @@ function sfs_install() {
     return;
   }
 }
+
+/* Enqueue scripts and styles */
+
+add_action('admin_enqueue_scripts', 'sfs_enqueue_bundles');
+
+function sfs_enqueue_bundles( $hook ){
+  wp_enqueue_style('sfs_admin_stylesheet', plugins_url('/dist/admin.styles.css', __FILE__));
+  wp_enqueue_script('sfs_admin_scripts', plugins_url('/dist/admin.bundle.js', __FILE__), array(), 1, false);
+}

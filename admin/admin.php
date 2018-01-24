@@ -92,6 +92,15 @@ function sfs_admin_twitter_options() {
   add_settings_field('sfs-last-import', __('Last Import', 'sprites-feed'), 'sfs_render_timestamp_settings', 'sfs-feed-twitter-settings', 'sfs-section-api-config', ['label_for' => 'sfs-last-import', 'option' => 'sfs-twitter-credentials']);
 }
 
+add_action('admin_init', 'sfs_admin_insta_options');
+
+function sfs_admin_insta_options() {
+	register_setting('sfs-insta-option-group', 'sfs-insta-credentials');
+	add_settings_section('sfs-section-api-key', __('Instagram API Auth', 'sprites-feed'), 'sfs_render_settings_section', 'sfs-feed-insta-settings');
+	add_settings_field('sfs-enable-service', __('Enable Service', 'sprites-feed'), 'sfs_render_enable_setting', 'sfs-feed-insta-settings', 'sfs-section-api-key', ['label_for' => 'sfs-enable-service', 'option' => 'sfs-insta-credentials']);
+	add_settings_field('sfs-api-access-key', __( 'API Access Key', 'sprites-feed' ),'sfs_render_settings_field','sfs-feed-insta-settings', 'sfs-section-api-key', ['label_for' => 'sfs-api-access-key']);
+}
+
 function sfs_render_settings_section( $args ) {
   ?>
 	<p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Configure your application access keys and configure API calls', 'sprites-feed' ); ?></p>
@@ -155,7 +164,7 @@ function sfs_render_timestamp_settings($args) {
 
     <div class="form-group">
 	    <input type="text"
-	           id="<?php echo esc_attr($args['lavel_for']) ?>"
+	           id="<?php echo esc_attr($args['label_for']) ?>"
 	           name="<?php echo esc_attr($args['option']); ?>[<?php echo esc_attr($args['label_for']) ?>]"
 	           value="<?php echo $value; ?>">
     </div>
@@ -269,7 +278,7 @@ add_action( 'admin_menu', 'sfs_admin_menu', 9 );
 
 function sfs_admin_menu() {
 
-  add_menu_page( __( 'Sprites Feed', 'sprites-feed' ), __( 'Sprites Feed', 'sprites-feed' ), 'sfs_full_capability', 'sfs-feed', 'sfs_admin_global_settings_page', 'dashicons-admin-site', 1000 );
+  add_menu_page( __( 'Sprites Feed', 'sprites-feed' ), __( 'Sprites Feed', 'sprites-feed' ), 'sfs_full_capability', 'sfs-feed', 'sfs_admin_global_settings_page', 'none', 1000 );
 
   $settings = add_submenu_page( 'sfs-feed', __( 'Global Settings', 'sprites-feed' ), __( 'Settings', 'sprites-feed' ), 'sfs_full_capability', 'sfs-feed', 'sfs_admin_global_settings_page' );
 
@@ -291,9 +300,9 @@ function sfs_admin_menu() {
 
   add_action( 'load-' . $yt, 'sfs_load_page_admin' );
 
-//  $insta = add_submenu_page( 'sprites-feed', __( 'Instagram Settings', 'sprites-feed' ), __( 'Instagram', 'sprites-feed' ), 'sfs_full_capability', 'sprites-feed-insta-settings', 'sfs_admin_insta_settings_page' );
-//
-//  add_action( 'load-' . $insta, 'sfs_load_page_admin' );
+  $insta = add_submenu_page( 'sfs-feed', __( 'Instagram Settings', 'sprites-feed' ), __( 'Instagram', 'sprites-feed' ), 'sfs_full_capability', 'sprites-feed-insta-settings', 'sfs_admin_insta_settings_page' );
+
+  add_action( 'load-' . $insta, 'sfs_load_page_admin' );
 
 }
 

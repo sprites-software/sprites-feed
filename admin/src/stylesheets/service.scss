@@ -1,0 +1,6 @@
+.Global.apiDisabled{
+  [id|=sfs-fb], [id|=sfs-api], [id|=sfs-yt], #sfs-last-import, #import-posts-btn{
+    opacity: .5;
+    pointer-events: none;
+  }
+}
