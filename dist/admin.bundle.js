@@ -94,6 +94,7 @@ ready(function () {
 var map = {
 	"./activation.scss": 2,
 	"./dashicon.scss": 3,
+	"./footer.scss": 23,
 	"./global.scss": 4,
 	"./input.scss": 5,
 	"./navigation.scss": 6,
@@ -190,6 +191,13 @@ if (!!checkbox && !!global) {
 /* 19 */,
 /* 20 */,
 /* 21 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 22 */,
+/* 23 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

@@ -8,10 +8,14 @@
 .wp-menu-open.toplevel_page_sfs-feed .wp-menu-image {
   -webkit-filter: grayscale(100%) brightness(140%);
           filter: grayscale(100%) brightness(140%); }
-.Global {
-  padding: 2rem;
-  background: #fff;
-  border: 1px solid #efefef; }
+.Footer {
+  margin-top: 1rem; }
+
+.Footer .Footer-list {
+  padding: 0;
+  list-style: none; }
+  .Footer .Footer-list li {
+    display: inline-block; }
 .Input.Input--Default {
   padding: 0.33rem; }
 .Navigation .Navigation-item {
@@ -36,3 +40,7 @@
 .Global.apiDisabled [id|=sfs-fb], .Global.apiDisabled [id|=sfs-api], .Global.apiDisabled [id|=sfs-yt], .Global.apiDisabled #sfs-last-import, .Global.apiDisabled #import-posts-btn {
   opacity: .5;
   pointer-events: none; }
+.Global {
+  padding: 2rem;
+  background: #fff;
+  border: 1px solid #efefef; }

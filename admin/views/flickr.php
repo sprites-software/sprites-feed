@@ -24,4 +24,10 @@ if ( isset( $_GET['settings-updated'] ) ) {
 			</form>
 		</div>
 	</div>
+  <div class="Footer">
+    <ul class="Footer-list">
+      <li>&copy;2018 <a href="//sprites.co" target="_blank"> Sprites Software </a></li>
+      <li><a href="#" target="_blank"> GitHub </a></li>
+    </ul>
+  </div>
 </div>
