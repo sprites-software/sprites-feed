@@ -10,15 +10,15 @@
 		<?php sfs_activation_panel(); ?>
 		<?php //do_action( 'sfs_admin_notices' ); ?>
 
-		<div class="Activation">
-			<div class="Activation-wrap">
-				<h2 class="Type Type--Headline"><?php _e('Activate your license'); ?></h2>
-				<form class="Form Form--inline">
-					<input type="text" class="Input Input--Default" placeholder="<?php _e('Insert your license key'); ?>">
-          <?php submit_button('Activate', 'primary', 'licence-activation', false); ?>
-				</form>
-			</div>
-		</div>
+<!--		<div class="Activation">-->
+<!--			<div class="Activation-wrap">-->
+<!--				<h2 class="Type Type--Headline">--><?php //_e('Activate your license'); ?><!--</h2>-->
+<!--				<form class="Form Form--inline">-->
+<!--					<input type="text" class="Input Input--Default" placeholder="--><?php //_e('Insert your license key'); ?><!--">-->
+<!--          --><?php //submit_button('Activate', 'primary', 'licence-activation', false); ?>
+<!--				</form>-->
+<!--			</div>-->
+<!--		</div>-->
 
 		<div class="Navigation">
 			<div class="Navigation-wrap">

@@ -614,7 +614,7 @@ function sfs_rmdir_p( $dir ) {
         continue;
       }
 
-      wpcf7_rmdir_p( path_join( $dir, $file ) );
+      sfs_rmdir_p( path_join( $dir, $file ) );
     }
 
     closedir( $handle );
