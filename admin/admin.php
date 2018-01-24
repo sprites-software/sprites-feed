@@ -155,7 +155,7 @@ function sfs_render_timestamp_settings($args) {
 
     <div class="form-group">
 	    <input type="text"
-	           id="<?php echo esc_attr($args['lavel_for']) ?>"
+	           id="<?php echo esc_attr($args['label_for']) ?>"
 	           name="<?php echo esc_attr($args['option']); ?>[<?php echo esc_attr($args['label_for']) ?>]"
 	           value="<?php echo $value; ?>">
     </div>
