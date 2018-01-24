@@ -269,7 +269,7 @@ add_action( 'admin_menu', 'sfs_admin_menu', 9 );
 
 function sfs_admin_menu() {
 
-  add_menu_page( __( 'Sprites Feed', 'sprites-feed' ), __( 'Sprites Feed', 'sprites-feed' ), 'sfs_full_capability', 'sfs-feed', 'sfs_admin_global_settings_page', 'dashicons-admin-site', 1000 );
+  add_menu_page( __( 'Sprites Feed', 'sprites-feed' ), __( 'Sprites Feed', 'sprites-feed' ), 'sfs_full_capability', 'sfs-feed', 'sfs_admin_global_settings_page', 'none', 1000 );
 
   $settings = add_submenu_page( 'sfs-feed', __( 'Global Settings', 'sprites-feed' ), __( 'Settings', 'sprites-feed' ), 'sfs_full_capability', 'sfs-feed', 'sfs_admin_global_settings_page' );
 

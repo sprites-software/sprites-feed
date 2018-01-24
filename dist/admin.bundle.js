@@ -86,10 +86,11 @@ importAll(__webpack_require__(1));
 
 var map = {
 	"./activation.scss": 2,
-	"./global.scss": 3,
-	"./input.scss": 4,
-	"./navigation.scss": 5,
-	"./plugin.scss": 6
+	"./dashicon.scss": 3,
+	"./global.scss": 4,
+	"./input.scss": 5,
+	"./navigation.scss": 6,
+	"./plugin.scss": 7
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -133,6 +134,12 @@ webpackContext.id = 1;
 
 /***/ }),
 /* 6 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 7 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
