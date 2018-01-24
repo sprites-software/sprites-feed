@@ -3,16 +3,8 @@
 function sfs_activation_panel() {
   $classes = 'welcome-panel';
 
-  $vers = (array) get_user_meta( get_current_user_id(),
-    'sfs_hide_welcome_panel_on', true );
-
-  if ( sfs_version_grep( sfs_version( 'only_major=1' ), $vers ) ) {
-    $classes .= ' hidden';
-  }
-
   ?>
   <div id="welcome-panel" class="<?php echo esc_attr( $classes ); ?>" style="padding:0 1rem .5rem;">
-    <?php wp_nonce_field( 'sfs-welcome-panel-nonce', 'welcomepanelnonce', false ); ?>
     <a class="welcome-panel-close" href="<?php echo esc_url( menu_page_url( 'sfs-feed', false ) ); ?>"><?php echo esc_html( __( 'Dismiss', 'sfs-feed' ) ); ?></a>
 
     <div class="welcome-panel-content" style="max-width: 100%">
@@ -31,27 +23,4 @@ function sfs_activation_panel() {
     </div>
   </div>
   <?php
-}
-
-add_action( 'wp_ajax_sfs-update-welcome-panel', 'sfs_admin_ajax_welcome_panel' );
-
-function sfs_admin_ajax_welcome_panel() {
-  check_ajax_referer( 'sfs-welcome-panel-nonce', 'welcomepanelnonce' );
-
-  $vers = get_user_meta( get_current_user_id(),
-    'sfs_hide_welcome_panel_on', true );
-
-  if ( empty( $vers ) || ! is_array( $vers ) ) {
-    $vers = array();
-  }
-
-  if ( empty( $_POST['visible'] ) ) {
-    $vers[] = sfs_version( 'only_major=1' );
-  }
-
-  $vers = array_unique( $vers );
-
-  update_user_meta( get_current_user_id(), 'sfs_hide_welcome_panel_on', $vers );
-
-  wp_die( 1 );
 }

@@ -4,15 +4,15 @@ namespace SFS\entity;
 
 class InstagramApi {
 
-  private $api_key;
+  private $access_key;
 
   private $api_secret;
 
-  public function setApiKey($api_key) {
-    $this->api_key = $api_key;
+  public function setAccessKey($access_key) {
+    $this->access_key = $access_key;
   }
-  public function getApiKey() {
-    return $this->api_key;
+  public function getAccessKey() {
+    return $this->access_key;
   }
   public function setApiSecret($api_secret) {
     $this->api_secret = $api_secret;
