@@ -1,3 +1,4 @@
+
 <?php
 if ( ! current_user_can( 'manage_options' ) ) {
   return;
@@ -31,4 +32,3 @@ if ( isset( $_GET['settings-updated'] ) ) {
 		</div>
 	</div>
 </div>
-</script>

@@ -7,13 +7,6 @@ if ( isset( $_GET['settings-updated'] ) ) {
   add_settings_error( 'sfs_messages', 'sfs_message', __( 'Settings Saved', 'sfs-feed' ), 'updated' );
 }
 ?>
-<style>
-	.Global {
-		padding: 2rem;
-		background: #fff;
-		border: 1px solid #efefef;
-	}
-</style>
 <div class="wrap">
 	<?php settings_errors( 'sfs_messages' ); ?>
 	<?php do_action( 'sfs_admin_warnings' ); ?>
@@ -33,4 +26,10 @@ if ( isset( $_GET['settings-updated'] ) ) {
 			</form>
 		</div>
 	</div>
+  <div class="Footer">
+    <ul class="Footer-list">
+      <li>&copy;2018 <a href="//sprites.co" target="_blank"> Sprites Software </a></li>
+      <li><a href="#" target="_blank"> GitHub </a></li>
+    </ul>
+  </div>
 </div>
