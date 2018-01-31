@@ -16,6 +16,10 @@
   list-style: none; }
   .Footer .Footer-list li {
     display: inline-block; }
+.Global {
+  padding: 2rem;
+  background: #fff;
+  border: 1px solid #efefef; }
 .Input.Input--Default {
   padding: 0.33rem; }
 .Navigation .Navigation-item {
@@ -40,7 +44,3 @@
 .Global.apiDisabled [id|=sfs-fb], .Global.apiDisabled [id|=sfs-api], .Global.apiDisabled [id|=sfs-yt], .Global.apiDisabled #sfs-last-import, .Global.apiDisabled #import-posts-btn {
   opacity: .5;
   pointer-events: none; }
-.Global {
-  padding: 2rem;
-  background: #fff;
-  border: 1px solid #efefef; }

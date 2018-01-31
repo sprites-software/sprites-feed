@@ -84,7 +84,7 @@ if (!NodeList.prototype.forEach) {
 importAll(__webpack_require__(1));
 
 ready(function () {
-  __webpack_require__(8);
+  __webpack_require__(10);
 });
 
 /***/ }),
@@ -94,12 +94,12 @@ ready(function () {
 var map = {
 	"./activation.scss": 2,
 	"./dashicon.scss": 3,
-	"./footer.scss": 23,
-	"./global.scss": 4,
-	"./input.scss": 5,
-	"./navigation.scss": 6,
-	"./plugin.scss": 7,
-	"./service.scss": 21
+	"./footer.scss": 4,
+	"./global.scss": 5,
+	"./input.scss": 6,
+	"./navigation.scss": 7,
+	"./plugin.scss": 8,
+	"./service.scss": 9
 };
 function webpackContext(req) {
 	return __webpack_require__(webpackContextResolve(req));
@@ -155,6 +155,18 @@ webpackContext.id = 1;
 
 /***/ }),
 /* 8 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -176,31 +188,6 @@ if (!!checkbox && !!global) {
     if (!checkbox.checked) disable();else enable();
   });
 }
-
-/***/ }),
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 22 */,
-/* 23 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

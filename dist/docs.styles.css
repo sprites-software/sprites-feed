@@ -1,0 +1,116 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  color: white;
+  background: -webkit-gradient(linear, left top, left bottom, from(#00aeef), to(#0072bc));
+  background: -webkit-linear-gradient(#00aeef, #0072bc);
+  background: -o-linear-gradient(#00aeef, #0072bc);
+  background: linear-gradient(#00aeef, #0072bc);
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  margin: 0; }
+
+p {
+  line-height: 1.6;
+  max-width: 32em; }
+
+h1 {
+  font-family: lato;
+  margin: 0; }
+
+ul {
+  padding: 0;
+  list-style: none;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between; }
+
+a {
+  text-decoration: none;
+  font-weight: 200;
+  font-size: .8em;
+  color: white; }
+  a:hover {
+    opacity: .8; }
+  a:visited {
+    color: white; }
+
+.container {
+  width: 90%;
+  height: 100%;
+  margin: auto;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center; }
+
+.info {
+  padding: 2em 1em; }
+
+.feed {
+  height: 50%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column; }
+
+.post {
+  margin: 2em 0;
+  font-size: .7em;
+  padding: 1em 2em 2em;
+  color: #333333;
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border-radius: 5px;
+  -webkit-box-shadow: 0 0 70px 10px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0 70px 10px rgba(0, 0, 0, 0.1); }
+
+@media screen and (min-width: 1024px) {
+  body {
+    font-size: 1.6vw; }
+  h1 {
+    font-size: 6vw; }
+  .container {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-pack: justify;
+        -ms-flex-pack: justify;
+            justify-content: space-between; }
+  .info {
+    max-width: 40%; }
+  .feed {
+    height: 100%;
+    width: 60%; } }
+
+@media screen and (-webkit-min-device-pixel-ratio: 2), screen and (-o-min-device-pixel-ratio: 2/1), screen and (min-resolution: 2dppx) {
+  body {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased; } }

@@ -89,7 +89,8 @@ console.log('\n\n')
 module.exports = {
   entry: {
     'admin':'./admin/src/index.js',
-    'page':'./page/src/index.js'
+    'page':'./page/src/index.js',
+    'docs':'./docs/src/index.js'
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
